@@ -32,7 +32,7 @@ namespace Polyglot
 
         private void DrawAutoComplete(SerializedProperty property)
         {
-            var localizedStrings = LocalizationManager.GetLanguagesStartsWith(property.stringValue);
+            var localizedStrings = LocalizationImporter.GetLanguagesStartsWith(property.stringValue);
             var selectedLanguage = (int)LocalizationManager.Instance.SelectedLanguage;
 
             EditorGUI.indentLevel++;
