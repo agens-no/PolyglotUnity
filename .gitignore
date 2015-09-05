@@ -19,4 +19,17 @@
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
-ProjectSettings/
+
+# Unity3D project settings
+
+ProjectSettings/AudioManager.asset
+ProjectSettings/DynamicsManager.asset
+ProjectSettings/EditorBuildSettings.asset
+ProjectSettings/GraphicsSettings.asset
+ProjectSettings/InputManager.asset
+ProjectSettings/NavMeshLayers.asset
+ProjectSettings/NetworkManager.asset
+ProjectSettings/Physics2DSettings.asset
+ProjectSettings/QualitySettings.asset
+ProjectSettings/TagManager.asset
+ProjectSettings/TimeManager.asset
