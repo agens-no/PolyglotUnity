@@ -39,7 +39,7 @@ namespace Polyglot
         public void OnLocalize()
         {
             var flags = text.hideFlags;
-            text.hideFlags = HideFlags.DontSaveInEditor;
+            text.hideFlags = HideFlags.DontSave;
             text.text = LocalizationManager.Get(key);
             text.hideFlags = flags;
         }
