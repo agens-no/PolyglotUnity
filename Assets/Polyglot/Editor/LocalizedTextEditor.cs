@@ -1,9 +1,13 @@
-﻿using JetBrains.Annotations;
+﻿#if UNITY_5
+using JetBrains.Annotations;
+#endif
 using UnityEditor;
 
 namespace Polyglot
 {
+#if UNITY_5
     [UsedImplicitly]
+#endif
     [CustomEditor(typeof(LocalizedText))]
     public class LocalizedTextEditor : Editor
     {

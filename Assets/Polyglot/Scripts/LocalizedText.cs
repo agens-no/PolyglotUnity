@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿#if UNITY_5
+using JetBrains.Annotations;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,13 +20,17 @@ namespace Polyglot
 
         public string Key { get { return key; } }
 
+#if UNITY_5
         [UsedImplicitly]
+#endif
         public void Reset()
         {
             text = GetComponent<Text>();
         }
 
+#if UNITY_5
         [UsedImplicitly]
+#endif
         public void Start()
         {
             LocalizationManager.Instance.AddOnLocalizeEvent(this);

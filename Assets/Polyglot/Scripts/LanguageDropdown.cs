@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿#if UNITY_5
+using JetBrains.Annotations;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,13 +17,17 @@ namespace Polyglot
         [SerializeField]
         private Dropdown dropdown;
 
+#if UNITY_5
         [UsedImplicitly]
+#endif
         public void Reset()
         {
             dropdown = GetComponent<Dropdown>();
         }
 
+#if UNITY_5
         [UsedImplicitly]
+#endif
         public void Start()
         {
             if (!LocalizationManager.HasInstance)

@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿#if UNITY_5
+using JetBrains.Annotations;
+#endif
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using UnityEngine.Events;
 
 namespace Polyglot
@@ -94,7 +96,9 @@ namespace Polyglot
             }
         }
 
+#if UNITY_5
         [UsedImplicitly]
+#endif
         public void Awake()
         {
             Instance = this;
