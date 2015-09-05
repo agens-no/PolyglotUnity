@@ -247,7 +247,7 @@ namespace Polyglot
 
                     if (!canBegin)
                     {
-                        if (line.StartsWith("BEGIN"))
+                        if (line.StartsWith("PolyMaster") || line.StartsWith("BEGIN"))
                         {
                             canBegin = true;
                             continue;
@@ -266,6 +266,12 @@ namespace Polyglot
 
                     var keys = line.Split(',').ToList();
                     var key = keys[0];
+
+                    if (string.IsNullOrEmpty(key) || IsLineBreak(key) || keys.Count <= 1)
+                    {
+                        //Ignore empty lines in the sheet
+                        continue;
+                    }
 
                     //Remove key
                     keys.RemoveAt(0);

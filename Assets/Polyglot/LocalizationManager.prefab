@@ -40,12 +40,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   csvFiles:
-  - {fileID: 4900000, guid: 69845bbe2f5796b478b871cf50187758, type: 3}
-  - {fileID: 4900000, guid: 668b9e0cf2e27e1439591f09d30909ef, type: 3}
-  - {fileID: 4900000, guid: 9002546124d07ce4190589f4be2aaf25, type: 3}
-  - {fileID: 4900000, guid: 4008d19250a6e4a469b2bac913559657, type: 3}
-  - {fileID: 4900000, guid: 4d699655ab1f0ae4fbb631ae5aabf615, type: 3}
-  - {fileID: 4900000, guid: 791819ac5cd3fb548bd308f4987cc53e, type: 3}
+  - {fileID: 4900000, guid: 04121c7b1034eeb409ace4c49253e6c7, type: 3}
   selectedLanguage: 0
   fallbackLanguage: 0
   Localize:
