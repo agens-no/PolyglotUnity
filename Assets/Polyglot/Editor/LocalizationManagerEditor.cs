@@ -16,6 +16,11 @@ namespace Polyglot
     {
         public override void OnInspectorGUI()
         {
+            if (GUILayout.Button("Import latest Polyglot mastersheet"))
+            {
+                ImportMasterCSV();
+            }
+
             var manager = target as LocalizationManager;
 
             var language = manager.SelectedLanguage;
@@ -25,11 +30,6 @@ namespace Polyglot
             if (language != manager.SelectedLanguage)
             {
                 manager.InvokeOnLocalize();
-            }
-
-            if (GUILayout.Button("Download latest"))
-            {
-                ImportMasterCSV();
             }
         }
 
