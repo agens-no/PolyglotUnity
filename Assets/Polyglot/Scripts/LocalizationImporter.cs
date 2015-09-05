@@ -35,11 +35,6 @@ namespace Polyglot
 
                     if (!canBegin)
                     {
-                        if (line.StartsWith("STRING ID"))
-                        {
-                            Debug.Log(line);
-                        }
-
                         if (line.StartsWith("PolyMaster") || line.StartsWith("BEGIN"))
                         {
                             canBegin = true;
