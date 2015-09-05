@@ -72,6 +72,8 @@ namespace Polyglot
 
         private static List<string> EmptyList = new List<string>();
 
+        private static Dictionary<string, List<string>> EmptyDictionary = new Dictionary<string, List<string>>();
+
         [Tooltip("This event is invoked every time the selected language is changed.")]
         public UnityEvent Localize = new UnityEvent();
 
@@ -187,6 +189,30 @@ namespace Polyglot
             return currentString.Length == 1 && (currentString[0] == '\r' || currentString[0] == '\n');
         }
 
+        public static Dictionary<string, List<string>> GetLanguagesStartsWith(string key)
+        {
+            if (!HasInstance)
+            {
+                return EmptyDictionary;
+            }
+
+            if (Instance.languageStrings == null || Instance.languageStrings.Count == 0)
+            {
+                Instance.PopulateLanguageStrings();
+            }
+
+            var multipleLanguageStrings = new Dictionary<string, List<string>>();
+            foreach (var languageString in Instance.languageStrings)
+            {
+                if (languageString.Key.ToLower().StartsWith(key.ToLower()))
+                {
+                    multipleLanguageStrings.Add(languageString.Key, languageString.Value);
+                }
+            }
+
+            return multipleLanguageStrings;
+        }
+
         private static List<string> GetLanguages(string key)
         {
             if (!HasInstance)
@@ -201,7 +227,6 @@ namespace Polyglot
 
             if (!Instance.languageStrings.ContainsKey(key))
             {
-                Debug.LogWarning("Cant find key " + key);
                 return EmptyList;
             }
 

@@ -9,18 +9,12 @@ namespace Polyglot
     [UsedImplicitly]
 #endif
     [CustomEditor(typeof(LocalizedText))]
-    public class LocalizedTextEditor : Editor
+    [CanEditMultipleObjects]
+    public class LocalizedTextEditor : LocalizedEditor<LocalizedText>
     {
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
-
-            var localized = target as LocalizedText;
-            if (!string.IsNullOrEmpty(localized.Key))
-            {
-                EditorGUILayout.LabelField("Localized", LocalizationManager.Get(localized.Key));
-                localized.OnLocalize();
-            }
+            OnInspectorGUI("key");
         }
     }
 }

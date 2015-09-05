@@ -18,7 +18,18 @@ namespace Polyglot
         [SerializeField]
         private string key;
 
-        public string Key { get { return key; } }
+        public string Key
+        {
+            get
+            {
+                return key;
+            }
+            set
+            {
+                key = value;
+                OnLocalize();
+            }
+        }
 
 #if UNITY_5
         [UsedImplicitly]
