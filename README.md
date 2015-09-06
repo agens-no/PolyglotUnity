@@ -13,6 +13,7 @@ Current Features
 	- Invokes event when language is changed
 - Script for localizing Text and TextMesh
 	- Auto completes localization key
-	- Updates text and alignment of text (hebrew and arabix is left to right).
+	- Updates text and alignment of text (hebrew and arabic is left to right).
+	- Supports parameters for localized strings such as "No {0} Selected".
 - Script for saving selected language
 	- Saves to PlayerPrefs
