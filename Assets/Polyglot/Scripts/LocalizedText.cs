@@ -1,9 +1,10 @@
 ﻿
-using System;
 #if UNITY_5
 using JetBrains.Annotations;
 #endif
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Polyglot
@@ -33,6 +34,10 @@ namespace Polyglot
             }
         }
 
+        public List<object> Parameters { get { return parameters; } }
+
+        private List<object> parameters = new List<object>();
+
 #if UNITY_5
         [UsedImplicitly]
 #endif
@@ -51,9 +56,18 @@ namespace Polyglot
 
         public void OnLocalize()
         {
+#if UNITY_EDITOR
             var flags = text.hideFlags;
             text.hideFlags = HideFlags.DontSave;
-            text.text = LocalizationManager.Get(key);
+#endif
+            if (parameters != null && parameters.Count > 0)
+            {
+                text.text = LocalizationManager.GetFormat(key, parameters.ToArray());
+            }
+            else
+            {
+                text.text = LocalizationManager.Get(key);
+            }
             var direction = LocalizationManager.Instance.SelectedLanguageDirection;
 
             if (IsOppositeDirection(text.alignment, direction))
@@ -80,8 +94,10 @@ namespace Polyglot
                         break;
                 }
             }
-            
+
+#if UNITY_EDITOR
             text.hideFlags = flags;
+#endif
         }
 
         private bool IsOppositeDirection(TextAnchor alignment, LanguageDirection direction)
@@ -96,6 +112,29 @@ namespace Polyglot
         private bool IsAlignmentLeft(TextAnchor alignment)
         {
             return alignment == TextAnchor.LowerLeft || alignment == TextAnchor.MiddleLeft || alignment == TextAnchor.UpperLeft;
+        }
+
+        public void ClearParameters()
+        {
+            parameters.Clear();
+        }
+
+        public void AddParameter(object parameter)
+        {
+            parameters.Add(parameter);
+            OnLocalize();
+        }
+        public void AddParameter(int parameter)
+        {
+            AddParameter((object) parameter);
+        }
+        public void AddParameter(float parameter)
+        {
+            AddParameter((object)parameter);
+        }
+        public void AddParameter(string parameter)
+        {
+            AddParameter((object)parameter);
         }
     }
 }

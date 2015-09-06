@@ -15,14 +15,27 @@ namespace Polyglot
         [SerializeField]
         private List<TextAsset> csvFiles;
 
+        public List<TextAsset> CSVFiles { get { return csvFiles; } }
+
         private static LocalizationManager instance;
 
         /// <summary>
         /// The singleton instance of this manager.
         /// </summary>
-        public static LocalizationManager Instance {  get { return instance; } set { instance = value; } }
+        public static LocalizationManager Instance
+        {
+            get
+            {
+                if (!HasInstance)
+                {
+                    Instance = FindObjectOfType<LocalizationManager>();
+                }
+                return instance;
+            }
+            set { instance = value; }
+        }
 
-        public static bool HasInstance { get { return Instance != null; }  }
+        public static bool HasInstance { get { return instance != null; }  }
 
         [Tooltip("The currently selected language of the game.\nThis will also be the default when you start the game for the first time.")]
         [SerializeField]
@@ -79,7 +92,6 @@ namespace Polyglot
 #endif
         public void Awake()
         {
-            LocalizationImporter.Init(csvFiles);
             Instance = this;
         }
 
@@ -157,6 +169,22 @@ namespace Polyglot
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public static string GetFormat(string key, params object[] arguments)
+        {
+            if (string.IsNullOrEmpty(key) || arguments == null || arguments.Length == 0)
+            {
+                return Get(key);
+            }
+
+            return string.Format(Get(key), arguments);
         }
     }
 }

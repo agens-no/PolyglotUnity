@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -15,7 +16,13 @@ namespace Polyglot
 
         private static List<TextAsset> CSVFiles = new List<TextAsset>();
 
-        public static void Init(List<TextAsset> csvFiles)
+        static LocalizationImporter()
+        {
+            var manager = UnityEngine.Object.FindObjectOfType<LocalizationManager>();
+            Init(manager.CSVFiles);
+        }
+
+        private static void Init(List<TextAsset> csvFiles)
         {
             CSVFiles.Clear();
             CSVFiles.AddRange(csvFiles);
@@ -76,11 +83,22 @@ namespace Polyglot
             }
         }
 
+        /// <summary>
+        /// Checks if the current string is \r or \n
+        /// </summary>
+        /// <param name="currentString"></param>
+        /// <returns></returns>
         public static bool IsLineBreak(string currentString)
         {
-            return currentString.Length == 1 && (currentString[0] == '\r' || currentString[0] == '\n');
+            return currentString.Length == 1 && (currentString[0] == '\r' || currentString[0] == '\n')
+                || currentString.Length == 2 && currentString.Equals(Environment.NewLine);
         }
 
+        /// <summary>
+        /// Get all language strings on a given key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static List<string> GetLanguages(string key)
         {
             if (languageStrings == null || languageStrings.Count == 0)
@@ -88,7 +106,7 @@ namespace Polyglot
                 PopulateLanguageStrings();
             }
 
-            if (!languageStrings.ContainsKey(key))
+            if (string.IsNullOrEmpty(key) || !languageStrings.ContainsKey(key))
             {
                 return EmptyList;
             }
@@ -113,6 +131,31 @@ namespace Polyglot
             }
 
             return multipleLanguageStrings;
+        }
+
+        public static Dictionary<string, List<string>> GetLanguagesContains(string key)
+        {
+            if (languageStrings == null || languageStrings.Count == 0)
+            {
+                PopulateLanguageStrings();
+            }
+
+            var multipleLanguageStrings = new Dictionary<string, List<string>>();
+            foreach (var languageString in languageStrings)
+            {
+                if (languageString.Key.ToLower().Contains(key.ToLower()))
+                {
+                    multipleLanguageStrings.Add(languageString.Key, languageString.Value);
+                }
+            }
+
+            return multipleLanguageStrings;
+        }
+
+        public static void Refresh()
+        {
+            languageStrings.Clear();
+            PopulateLanguageStrings();
         }
     }
 }

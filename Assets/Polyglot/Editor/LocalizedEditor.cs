@@ -10,7 +10,8 @@ namespace Polyglot
         public void OnInspectorGUI(string propertyPath)
         {
             base.OnInspectorGUI();
-
+            
+            serializedObject.Update();
 
             var property = serializedObject.FindProperty(propertyPath);
 
@@ -28,22 +29,30 @@ namespace Polyglot
                     EditorGUILayout.LabelField("Localized", localizedString);
                 }
             }
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawAutoComplete(SerializedProperty property)
         {
             var localizedStrings = LocalizationImporter.GetLanguagesStartsWith(property.stringValue);
+
+            if (localizedStrings.Count == 0)
+            {
+                localizedStrings = LocalizationImporter.GetLanguagesContains(property.stringValue);
+            }
+
             var selectedLanguage = (int)LocalizationManager.Instance.SelectedLanguage;
 
             EditorGUI.indentLevel++;
             var index = 0;
+            EditorGUILayout.LabelField("Auto-Complete");
             foreach (var local in localizedStrings)
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PrefixLabel(local.Key);
                 if (GUILayout.Button(local.Value[selectedLanguage], "CN CountBadge"))
                 {
-                    property.stringValue = local.Value[selectedLanguage];
+                    property.stringValue = local.Key;
                     GUIUtility.hotControl = 0;
                     GUIUtility.keyboardControl = 0;
                 }

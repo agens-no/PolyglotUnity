@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 #endif
 using UnityEditor;
+using UnityEditor.AnimatedValues;
 
 namespace Polyglot
 {
@@ -12,9 +13,35 @@ namespace Polyglot
     [CanEditMultipleObjects]
     public class LocalizedTextEditor : LocalizedEditor<LocalizedText>
     {
+        private AnimBool showParameters = new AnimBool(false);
+
         public override void OnInspectorGUI()
         {
             OnInspectorGUI("key");
+
+            if (!serializedObject.isEditingMultipleObjects)
+            {
+                var text = target as LocalizedText;
+                if (text != null)
+                {
+                    var parameters = text.Parameters;
+                    if (parameters != null && parameters.Count > 0)
+                    {
+                        showParameters.value = EditorGUILayout.Foldout(showParameters.value, "Parameters");
+                        if (EditorGUILayout.BeginFadeGroup(showParameters.faded))
+                        {
+                            EditorGUI.indentLevel++;
+                            for (int index = 0; index < parameters.Count; index++)
+                            {
+                                var parameter = parameters[index];
+                                EditorGUILayout.SelectableLabel(parameter != null ? parameter.ToString() : "null");
+                            }
+                            EditorGUI.indentLevel--;
+                        }
+                        EditorGUILayout.EndFadeGroup();
+                    }
+                }
+            }
         }
     }
 }
