@@ -1,6 +1,4 @@
-﻿
-using System;
-#if UNITY_5
+﻿#if UNITY_5
 using JetBrains.Annotations;
 #endif
 using UnityEngine;
@@ -11,7 +9,7 @@ namespace Polyglot
 {
     public class LocalizationManager : MonoBehaviour
     { 
-        [Tooltip("The comma separated text files to get localization strings from")]
+        [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always priotized.")]
         [SerializeField]
         private List<TextAsset> csvFiles;
 

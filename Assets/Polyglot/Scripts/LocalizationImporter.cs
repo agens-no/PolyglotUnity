@@ -30,15 +30,16 @@ namespace Polyglot
 
         private static void PopulateLanguageStrings()
         {
-            for (int i = 0; i < CSVFiles.Count; i++)
+            for (int index = 0; index < CSVFiles.Count; index++)
             {
-                var textAsset = CSVFiles[i];
+                var textAsset = CSVFiles[index];
+                Debug.Log("Importing " + textAsset.name);
                 var text = textAsset.text;
                 var lines = text.Split('\n');
                 var canBegin = false;
-                for (int index = 0; index < lines.Length; index++)
+                for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
                 {
-                    var line = lines[index];
+                    var line = lines[lineIndex];
 
                     if (!canBegin)
                     {
@@ -75,9 +76,11 @@ namespace Polyglot
 
                     if (languageStrings.ContainsKey(key))
                     {
-                        Debug.LogWarning("Duplicate key: " + key);
+                        Debug.Log("The key '" + key + "' already exist, but is now overwritten by a csv (" + textAsset.name + ") with higher priority (" + index + ")");
+                        languageStrings[key] = keys;
                         continue;
                     }
+
                     languageStrings.Add(key, keys);
                 }
             }
