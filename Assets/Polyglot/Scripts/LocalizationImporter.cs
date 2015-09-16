@@ -19,6 +19,11 @@ namespace Polyglot
         static LocalizationImporter()
         {
             var manager = UnityEngine.Object.FindObjectOfType<LocalizationManager>();
+            if (manager == null)
+            {
+                Debug.LogError("Could not find a LocalizationManager added to the scene.");
+                return;
+            }
             Init(manager.CSVFiles);
         }
 

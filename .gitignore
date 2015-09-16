@@ -36,3 +36,5 @@ ProjectSettings/TimeManager.asset
 ProjectSettings/ProjectVersion.txt
 ProjectSettings/UnityAnalyticsManager.asset
 ProjectSettings/UnityAdsSettings.asset
+ProjectSettings/ClusterInputManager.asset
+ProjectSettings/UnityConnectSettings.asset
