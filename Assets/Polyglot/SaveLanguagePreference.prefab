@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 445514}
   - 114: {fileID: 11446108}
   m_Layer: 0
-  m_Name: LocalizationManager
+  m_Name: SaveLanguagePreference
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,4 +55,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 125558}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

@@ -8,7 +8,10 @@ using UnityEngine.Events;
 namespace Polyglot
 {
     public class Localization : ScriptableObject
-    { 
+    {
+        private const string KeyNotFound = "[{0}]";
+
+
         [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always priotized.")]
         [SerializeField]
         private List<TextAsset> csvFiles;
@@ -200,7 +203,7 @@ namespace Polyglot
                 return currentString;
             }
 
-            return string.Empty;
+            return string.Format(KeyNotFound, key);
         }
 
         /// <summary>
