@@ -57,8 +57,6 @@ namespace Polyglot
                         if (line.StartsWith("Polyglot") || line.StartsWith("PolyMaster") || line.StartsWith("BEGIN"))
                         {
                             canBegin = true;
-                            Debug.Log("Importing " + textAsset);
-
                             continue;
                         }
                     }

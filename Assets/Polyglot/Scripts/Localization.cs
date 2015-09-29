@@ -79,6 +79,19 @@ namespace Polyglot
             }
         }
 
+        public int SelectedLanguageIndex
+        {
+            get
+            {
+                if (supportedLanguages == null || supportedLanguages.Count == 0)
+                {
+                    return (int) SelectedLanguage;
+                }
+
+                return supportedLanguages.IndexOf(SelectedLanguage);
+            }
+        }
+
         public Language SelectedLanguage
         {
             get
@@ -138,7 +151,14 @@ namespace Polyglot
         /// <param name="selected"></param>
         public void SelectLanguage(int selected)
         {
-            SelectedLanguage = (Language)selected;
+            if (supportedLanguages == null || supportedLanguages.Count == 0)
+            {
+                SelectedLanguage = (Language) selected;
+            }
+            else
+            {
+                SelectedLanguage = supportedLanguages[selected];
+            }
         }
 
         /// <summary>

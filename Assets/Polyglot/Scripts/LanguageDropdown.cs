@@ -31,15 +31,9 @@ namespace Polyglot
 #endif
         public void Start()
         {
-            if (!LocalizationManager.HasInstance)
-            {
-                Debug.LogWarning("LocalizationManager missing", this);
-                return;
-            }
-
             CreateDropdown();
 
-            LocalizationManager.Instance.AddOnLocalizeEvent(this);
+            Localization.Instance.AddOnLocalizeEvent(this);
         }
 
         private void CreateDropdown()
@@ -49,7 +43,7 @@ namespace Polyglot
 
             dropdown.options.Clear();
 
-            var languageNames = LocalizationManager.Instance.EnglishLanguageNames;
+            var languageNames = Localization.Instance.EnglishLanguageNames;
 
             for (int index = 0; index < languageNames.Count; index++)
             {
@@ -58,7 +52,7 @@ namespace Polyglot
             }
 
             dropdown.value = -1;
-            dropdown.value = (int)LocalizationManager.Instance.SelectedLanguage;
+            dropdown.value = Localization.Instance.SelectedLanguageIndex;
 
             dropdown.hideFlags = flags;
         }
@@ -66,10 +60,10 @@ namespace Polyglot
 #endif
         public void OnLocalize()
         {
-#if UNITY_5_2
-            dropdown.onValueChanged.RemoveListener(LocalizationManager.Instance.SelectLanguage);
-            dropdown.value = (int)LocalizationManager.Instance.SelectedLanguage;
-            dropdown.onValueChanged.AddListener(LocalizationManager.Instance.SelectLanguage);
+#if UNITY_5_2 || UNITY_5_3 || UNITY_5_4
+            dropdown.onValueChanged.RemoveListener(Localization.Instance.SelectLanguage);
+            dropdown.value = Localization.Instance.SelectedLanguageIndex;
+            dropdown.onValueChanged.AddListener(Localization.Instance.SelectLanguage);
 #endif
         }
     }
