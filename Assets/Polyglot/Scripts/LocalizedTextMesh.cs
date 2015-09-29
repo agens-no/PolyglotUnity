@@ -33,16 +33,16 @@ namespace Polyglot
 #endif
         public void Start()
         {
-            LocalizationManager.Instance.AddOnLocalizeEvent(this);
+            Localization.Instance.AddOnLocalizeEvent(this);
         }
 
         public void OnLocalize()
         {
             var flags = text.hideFlags;
             text.hideFlags = HideFlags.DontSave;
-            text.text = LocalizationManager.Get(key);
+            text.text = Localization.Get(key);
 
-            var direction = LocalizationManager.Instance.SelectedLanguageDirection;
+            var direction = Localization.Instance.SelectedLanguageDirection;
 
             if (IsOppositeDirection(text.alignment, direction))
             {

@@ -14,19 +14,15 @@ namespace Polyglot
 #if UNITY_5
         [UsedImplicitly]
 #endif
-        public IEnumerator Start()
+        public void Start()
         {
-            while (!LocalizationManager.HasInstance)
-            {
-                yield return null;
-            }
-            LocalizationManager.Instance.SelectedLanguage = (Language) PlayerPrefs.GetInt(preferenceKey);
-            LocalizationManager.Instance.AddOnLocalizeEvent(this);
+            Localization.Instance.SelectedLanguage = (Language) PlayerPrefs.GetInt(preferenceKey);
+            Localization.Instance.AddOnLocalizeEvent(this);
         }
 
         public void OnLocalize()
         {
-            PlayerPrefs.SetInt(preferenceKey, (int) LocalizationManager.Instance.SelectedLanguage);
+            PlayerPrefs.SetInt(preferenceKey, (int) Localization.Instance.SelectedLanguage);
         }
     }
 }

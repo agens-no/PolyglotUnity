@@ -12,8 +12,9 @@ namespace Polyglot
     [AddComponentMenu("UI/Language Dropdown", 36)]
     public class LanguageDropdown : MonoBehaviour, ILocalize
     {
-#if UNITY_5_2
+#if UNITY_5_2 || UNITY_5_3
         [Tooltip("The dropdown to populate with all the available languages")]
+
         [SerializeField]
         private Dropdown dropdown;
 

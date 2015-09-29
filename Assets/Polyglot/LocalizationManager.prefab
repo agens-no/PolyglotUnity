@@ -8,7 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 445514}
-  - 114: {fileID: 11433482}
   - 114: {fileID: 11446108}
   m_Layer: 0
   m_Name: LocalizationManager
@@ -29,26 +28,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11433482
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 125558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43594b979e6305a44adf6c5b88b292af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  csvFiles:
-  - {fileID: 4900000, guid: 04121c7b1034eeb409ace4c49253e6c7, type: 3}
-  selectedLanguage: 0
-  fallbackLanguage: 0
-  Localize:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
 --- !u!114 &11446108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -76,3 +55,4 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 125558}
   m_IsPrefabParent: 1
+  m_IsExploded: 1

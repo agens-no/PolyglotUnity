@@ -16,8 +16,10 @@ public class LocalizationPostProcessor : AssetPostprocessor
         for (int index = 0; index < importedAssets.Length; index++)
         {
             var str = importedAssets[index];
-            if (str.EndsWith(".csv") && str.Contains("Polyglot"))
+            //Debug.Log("str: " + str);
+            if (str.EndsWith(".csv") && str.Contains("Localization"))
             {
+                //Debug.Log("LocalizationImporter.Refresh");
                 LocalizationImporter.Refresh();
             }
         }

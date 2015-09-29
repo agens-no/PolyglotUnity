@@ -18,13 +18,13 @@ namespace Polyglot
 
         static LocalizationImporter()
         {
-            var manager = UnityEngine.Object.FindObjectOfType<LocalizationManager>();
-            if (manager == null)
+            var settings = Localization.Instance;
+            if (settings == null)
             {
-                Debug.LogError("Could not find a LocalizationManager added to the scene.");
+                Debug.LogError("Could not find a Localization Settings file in Resources.");
                 return;
             }
-            Init(manager.CSVFiles);
+            Init(settings.CSVFiles);
         }
 
         private static void Init(List<TextAsset> csvFiles)
@@ -35,10 +35,16 @@ namespace Polyglot
 
         private static void PopulateLanguageStrings()
         {
-            for (int index = 0; index < CSVFiles.Count; index++)
+            for (var index = 0; index < CSVFiles.Count; index++)
             {
                 var textAsset = CSVFiles[index];
-                Debug.Log("Importing " + textAsset.name);
+
+                if (textAsset == null)
+                {
+                    Debug.LogError("CSVFiles[" + index + "] is null");
+                    continue;
+                }
+
                 var text = textAsset.text;
                 var lines = text.Split('\n');
                 var canBegin = false;
@@ -48,9 +54,11 @@ namespace Polyglot
 
                     if (!canBegin)
                     {
-                        if (line.StartsWith("PolyMaster") || line.StartsWith("BEGIN"))
+                        if (line.StartsWith("Polyglot") || line.StartsWith("PolyMaster") || line.StartsWith("BEGIN"))
                         {
                             canBegin = true;
+                            Debug.Log("Importing " + textAsset);
+
                             continue;
                         }
                     }
@@ -85,7 +93,6 @@ namespace Polyglot
                         languageStrings[key] = keys;
                         continue;
                     }
-
                     languageStrings.Add(key, keys);
                 }
             }

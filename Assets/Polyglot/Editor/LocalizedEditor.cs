@@ -18,7 +18,7 @@ namespace Polyglot
             var key = property.stringValue;
             if (!string.IsNullOrEmpty(key))
             {
-                var localizedString = LocalizationManager.Get(key);
+                var localizedString = Localization.Get(key);
 
                 if (string.IsNullOrEmpty(localizedString))
                 {
@@ -41,7 +41,7 @@ namespace Polyglot
                 localizedStrings = LocalizationImporter.GetLanguagesContains(property.stringValue);
             }
 
-            var selectedLanguage = (int)LocalizationManager.Instance.SelectedLanguage;
+            var selectedLanguage = (int)Localization.Instance.SelectedLanguage;
 
             EditorGUI.indentLevel++;
             var index = 0;

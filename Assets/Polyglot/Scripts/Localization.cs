@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace Polyglot
 {
-    public class LocalizationManager : MonoBehaviour
+    public class Localization : ScriptableObject
     { 
         [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always priotized.")]
         [SerializeField]
@@ -15,25 +15,40 @@ namespace Polyglot
 
         public List<TextAsset> CSVFiles { get { return csvFiles; } }
 
-        private static LocalizationManager instance;
+        private static Localization instance;
 
         /// <summary>
         /// The singleton instance of this manager.
         /// </summary>
-        public static LocalizationManager Instance
+        public static Localization Instance
         {
             get
             {
                 if (!HasInstance)
                 {
-                    Instance = FindObjectOfType<LocalizationManager>();
+                    Debug.LogError("Could not load Localization Settings from Resources");
                 }
                 return instance;
             }
             set { instance = value; }
         }
 
-        public static bool HasInstance { get { return instance != null; }  }
+        private static bool HasInstance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = Resources.Load<Localization>("Localization");
+                }
+
+                return instance != null;
+            }
+        }
+
+        [Tooltip("The supported languages by the game.\n Leave empty if you support them all.")]
+        [SerializeField]
+        private List<Language> supportedLanguages;
 
         [Tooltip("The currently selected language of the game.\nThis will also be the default when you start the game for the first time.")]
         [SerializeField]
@@ -79,18 +94,10 @@ namespace Polyglot
 
         public void InvokeOnLocalize()
         {
-            if (HasInstance && Instance.Localize != null)
+            if (Localize != null)
             {
-                Instance.Localize.Invoke();
+                Localize.Invoke();
             }
-        }
-
-#if UNITY_5
-        [UsedImplicitly]
-#endif
-        public void Awake()
-        {
-            Instance = this;
         }
 
         /// <summary>
@@ -132,6 +139,14 @@ namespace Polyglot
             Localize.AddListener(localize.OnLocalize);
             localize.OnLocalize();
         }
+        /// <summary>
+        /// Removes a Localization listener.
+        /// </summary>
+        /// <param name="localize"></param>
+        public void RemoveOnLocalizeEvent(ILocalize localize)
+        {
+            Localize.RemoveListener(localize.OnLocalize);
+        }
 
         /// <summary>
         /// Retreives the correct language string by key.
@@ -143,15 +158,9 @@ namespace Polyglot
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
-                Instance = FindObjectOfType<LocalizationManager>();
+                Instance = FindObjectOfType<Localization>();
             }
 #endif
-
-            if (!HasInstance)
-            {
-                Debug.LogWarning("LocalizationManager is missing");
-                return string.Empty;
-            }
 
             var languages = LocalizationImporter.GetLanguages(key);
             var selected = (int) Instance.selectedLanguage;

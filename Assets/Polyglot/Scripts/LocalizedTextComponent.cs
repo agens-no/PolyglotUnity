@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+#if UNITY_5
 using JetBrains.Annotations;
+#endif
 using UnityEngine;
 
 namespace Polyglot
@@ -43,7 +45,7 @@ namespace Polyglot
 #endif
         public void Start()
         {
-            LocalizationManager.Instance.AddOnLocalizeEvent(this);
+            Localization.Instance.AddOnLocalizeEvent(this);
         }
 
         protected abstract void SetText(T component, string value);
@@ -53,22 +55,24 @@ namespace Polyglot
         public void OnLocalize()
         {
 #if UNITY_EDITOR
-            var flags = text.hideFlags;
-            text.hideFlags = HideFlags.DontSave;
+            var flags = text != null ? text.hideFlags : HideFlags.None;
+            if(text != null) text.hideFlags = HideFlags.DontSave;
 #endif
             if (parameters != null && parameters.Count > 0)
             {
-                SetText(text, LocalizationManager.GetFormat(key, parameters.ToArray()));
+                SetText(text, Localization.GetFormat(key, parameters.ToArray()));
             }
             else
             {
-                SetText(text, LocalizationManager.Get(key));
+                SetText(text, Localization.Get(key));
             }
-            var direction = LocalizationManager.Instance.SelectedLanguageDirection;
 
-            UpdateAlignment(text, direction);
+            var direction = Localization.Instance.SelectedLanguageDirection;
+
+            if (text != null) UpdateAlignment(text, direction);
+
 #if UNITY_EDITOR
-            text.hideFlags = flags;
+            if (text != null) text.hideFlags = flags;
 #endif
         }
         

@@ -9,6 +9,11 @@ namespace Polyglot
     {
         protected override void SetText(Text text, string value)
         {
+            if (text == null)
+            {
+                Debug.LogWarning("Missing text component for " + this, this);
+                return;
+            }
             text.text = value;
         }
 
