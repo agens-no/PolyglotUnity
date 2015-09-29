@@ -87,9 +87,21 @@ namespace Polyglot
             }
             set
             {
-                selectedLanguage = value;
-                InvokeOnLocalize();
+                if (IsLanguageSupported(value))
+                {
+                    selectedLanguage = value;
+                    InvokeOnLocalize();
+                }
+                else
+                {
+                    Debug.LogWarning(value + " is not a supported language.");
+                }
             }
+        }
+
+        private bool IsLanguageSupported(Language language)
+        {
+            return supportedLanguages == null || supportedLanguages.Count == 0 || supportedLanguages.Contains(language);
         }
 
         public void InvokeOnLocalize()
@@ -103,12 +115,12 @@ namespace Polyglot
         /// <summary>
         /// The english names of all available languages.
         /// </summary>
-        public List<string> EnglishLanguageNames { get { return LocalizationImporter.GetLanguages("MENU_LANGUAGE_THIS_EN"); } }
+        public List<string> EnglishLanguageNames { get { return LocalizationImporter.GetLanguages("MENU_LANGUAGE_THIS_EN", supportedLanguages); } }
 
         /// <summary>
         /// The localized names of all available languages.
         /// </summary>
-        public List<string> LocalizedLanguageNames { get { return LocalizationImporter.GetLanguages("MENU_LANGUAGE_THIS"); } }
+        public List<string> LocalizedLanguageNames { get { return LocalizationImporter.GetLanguages("MENU_LANGUAGE_THIS", supportedLanguages); } }
 
         /// <summary>
         /// The english name of the selected language.
@@ -155,13 +167,6 @@ namespace Polyglot
         /// <returns>A localized string</returns>
         public static string Get(string key)
         {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                Instance = FindObjectOfType<Localization>();
-            }
-#endif
-
             var languages = LocalizationImporter.GetLanguages(key);
             var selected = (int) Instance.selectedLanguage;
             if (languages.Count > 0 && Instance.selectedLanguage >= 0 && selected < languages.Count)

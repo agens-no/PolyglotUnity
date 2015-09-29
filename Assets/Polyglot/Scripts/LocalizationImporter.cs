@@ -114,7 +114,7 @@ namespace Polyglot
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static List<string> GetLanguages(string key)
+        public static List<string> GetLanguages(string key, List<Language> supportedLanguages = null)
         {
             if (languageStrings == null || languageStrings.Count == 0)
             {
@@ -126,7 +126,20 @@ namespace Polyglot
                 return EmptyList;
             }
 
-            return languageStrings[key];
+            if (supportedLanguages == null || supportedLanguages.Count == 0)
+            {
+                return languageStrings[key];
+            }
+
+            // Filter the supported languages down to the supported ones
+            var supportedLanguageStrings = new List<string>(supportedLanguages.Count);
+            for (int index = 0; index < supportedLanguages.Count; index++)
+            {
+                var language = supportedLanguages[index];
+                var supportedLanguage = (int) language;
+                supportedLanguageStrings.Add(languageStrings[key][supportedLanguage]);
+            }
+            return supportedLanguageStrings;
         }
 
         public static Dictionary<string, List<string>> GetLanguagesStartsWith(string key)

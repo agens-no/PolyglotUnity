@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   csvFiles:
   - {fileID: 4900000, guid: 04121c7b1034eeb409ace4c49253e6c7, type: 3}
-  supportedLanguages: 
-  selectedLanguage: 0
+  supportedLanguages: 000000000100000002000000030000000b000000
+  selectedLanguage: 12
   fallbackLanguage: 0
   Localize:
     m_PersistentCalls:
