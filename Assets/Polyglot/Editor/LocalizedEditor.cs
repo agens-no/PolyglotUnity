@@ -3,16 +3,15 @@ using UnityEngine;
 
 namespace Polyglot
 {
-    public abstract class LocalizedEditor<T> : Editor
+    public abstract class LocalizedEditor<T> : Editor where T : class, ILocalize
     {
         private static int MaxAutoComplete = 6;
 
         public void OnInspectorGUI(string propertyPath)
         {
-            base.OnInspectorGUI();
-            
+            var changed = DrawDefaultInspector();
+            EditorGUI.BeginChangeCheck();
             serializedObject.Update();
-
             var property = serializedObject.FindProperty(propertyPath);
 
             var key = property.stringValue;
@@ -30,6 +29,15 @@ namespace Polyglot
                 }
             }
             serializedObject.ApplyModifiedProperties();
+
+            if (EditorGUI.EndChangeCheck() || changed)
+            {
+                var text = target as T;
+                if (text != null)
+                {
+                    text.OnLocalize();
+                }
+            }
         }
 
         private void DrawAutoComplete(SerializedProperty property)
