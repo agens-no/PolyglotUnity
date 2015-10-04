@@ -14,7 +14,7 @@ MonoBehaviour:
   csvFiles:
   - {fileID: 4900000, guid: 04121c7b1034eeb409ace4c49253e6c7, type: 3}
   supportedLanguages: 000000000100000002000000030000000b000000
-  selectedLanguage: 12
+  selectedLanguage: 0
   fallbackLanguage: 0
   Localize:
     m_PersistentCalls:

@@ -13,7 +13,14 @@ namespace Polyglot
     [CanEditMultipleObjects]
     public class LocalizedTextEditor : LocalizedEditor<LocalizedText>
     {
-        private AnimBool showParameters = new AnimBool(false);
+        private AnimBool showParameters;
+
+        public override void OnEnable()
+        {
+            base.OnEnable();
+            showParameters = new AnimBool(true);
+            showParameters.valueChanged.AddListener(Repaint);
+    }
 
         public override void OnInspectorGUI()
         {
@@ -27,7 +34,7 @@ namespace Polyglot
                     var parameters = text.Parameters;
                     if (parameters != null && parameters.Count > 0)
                     {
-                        showParameters.value = EditorGUILayout.Foldout(showParameters.value, "Parameters");
+                        showParameters.target = EditorGUILayout.Foldout(showParameters.target, "Parameters");
                         if (EditorGUILayout.BeginFadeGroup(showParameters.faded))
                         {
                             EditorGUI.indentLevel++;

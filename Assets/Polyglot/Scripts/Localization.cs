@@ -206,6 +206,13 @@ namespace Polyglot
             return string.Format(KeyNotFound, key);
         }
 
+        public static bool KeyExist(string key)
+        {
+            var languages = LocalizationImporter.GetLanguages(key);
+            var selected = (int) Instance.selectedLanguage;
+            return languages.Count > 0 && Instance.selectedLanguage >= 0 && selected < languages.Count;
+        }
+
         /// <summary>
         /// 
         /// </summary>

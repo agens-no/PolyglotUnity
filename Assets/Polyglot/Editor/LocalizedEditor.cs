@@ -1,36 +1,47 @@
 using UnityEditor;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 
 namespace Polyglot
 {
     public abstract class LocalizedEditor<T> : Editor where T : class, ILocalize
     {
-        private static int MaxAutoComplete = 6;
+        private Vector2 scroll;
+        private AnimBool showAutoComplete;
+
+        public virtual void OnEnable()
+        {
+            showAutoComplete = new AnimBool(true);
+            showAutoComplete.valueChanged.AddListener(Repaint);
+        }
 
         public void OnInspectorGUI(string propertyPath)
         {
-            var changed = DrawDefaultInspector();
             EditorGUI.BeginChangeCheck();
             serializedObject.Update();
-            var property = serializedObject.FindProperty(propertyPath);
-
-            var key = property.stringValue;
-            if (!string.IsNullOrEmpty(key))
+            SerializedProperty iterator = serializedObject.GetIterator();
+            for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
             {
-                var localizedString = Localization.Get(key);
+                EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
 
-                if (string.IsNullOrEmpty(localizedString))
+                if (iterator.name == propertyPath)
                 {
-                    DrawAutoComplete(property);
-                }
-                else
-                {
-                    EditorGUILayout.LabelField("Localized", localizedString);
+                    var key = iterator.stringValue;
+                    var localizedString = Localization.Get(key);
+                    EditorGUILayout.LabelField("Localized Text", localizedString);
+
+                    if (!string.IsNullOrEmpty(key))
+                    {
+                        if (!Localization.KeyExist(key))
+                        {
+                            DrawAutoComplete(iterator);
+                        }
+                    }
                 }
             }
             serializedObject.ApplyModifiedProperties();
 
-            if (EditorGUI.EndChangeCheck() || changed)
+            if (EditorGUI.EndChangeCheck())
             {
                 var text = target as T;
                 if (text != null)
@@ -43,7 +54,7 @@ namespace Polyglot
         private void DrawAutoComplete(SerializedProperty property)
         {
             var localizedStrings = LocalizationImporter.GetLanguagesStartsWith(property.stringValue);
-
+            
             if (localizedStrings.Count == 0)
             {
                 localizedStrings = LocalizationImporter.GetLanguagesContains(property.stringValue);
@@ -51,30 +62,30 @@ namespace Polyglot
 
             var selectedLanguage = (int)Localization.Instance.SelectedLanguage;
 
-            EditorGUI.indentLevel++;
-            var index = 0;
-            EditorGUILayout.LabelField("Auto-Complete");
-            foreach (var local in localizedStrings)
+            showAutoComplete.target = EditorGUILayout.Foldout(showAutoComplete.target, "Auto-Complete");
+            if (EditorGUILayout.BeginFadeGroup(showAutoComplete.faded))
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.PrefixLabel(local.Key);
-                if (GUILayout.Button(local.Value[selectedLanguage], "CN CountBadge"))
-                {
-                    property.stringValue = local.Key;
-                    GUIUtility.hotControl = 0;
-                    GUIUtility.keyboardControl = 0;
-                }
+                EditorGUI.indentLevel++;
 
-                index++;
-                EditorGUILayout.EndHorizontal();
-
-                if (index > MaxAutoComplete)
+                var height = EditorGUIUtility.singleLineHeight * (Mathf.Min(localizedStrings.Count, 6) + 1);
+                scroll = EditorGUILayout.BeginScrollView(scroll, GUILayout.Height(height));
+                foreach (var local in localizedStrings)
                 {
-                    EditorGUILayout.LabelField(string.Empty, "..And " + (localizedStrings.Count - MaxAutoComplete) + " more");
-                    break;
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PrefixLabel(local.Key);
+                    if (GUILayout.Button(local.Value[selectedLanguage], "CN CountBadge"))
+                    {
+                        property.stringValue = local.Key;
+                        GUIUtility.hotControl = 0;
+                        GUIUtility.keyboardControl = 0;
+                    }
+                    EditorGUILayout.EndHorizontal();
                 }
+                EditorGUILayout.EndScrollView();
+                EditorGUI.indentLevel--;
             }
-            EditorGUI.indentLevel--;
+            EditorGUILayout.EndFadeGroup();
+
         }
     }
 }
