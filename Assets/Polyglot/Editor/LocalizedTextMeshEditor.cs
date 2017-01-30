@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 #endif
 using UnityEditor;
-using UnityEngine;
 
 namespace Polyglot
 {

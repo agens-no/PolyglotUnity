@@ -7,12 +7,12 @@ using UnityEngine.Events;
 
 namespace Polyglot
 {
+    [CreateAssetMenu(fileName = "Localization.asset", menuName = "Polyglot Localization")]
     public class Localization : ScriptableObject
     {
         private const string KeyNotFound = "[{0}]";
 
-
-        [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always priotized.")]
+        [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always prioritized.")]
         [SerializeField]
         private List<TextAsset> csvFiles;
 
@@ -61,6 +61,7 @@ namespace Polyglot
         [SerializeField]
         private Language fallbackLanguage = Language.English;
 
+        [Header("Event invoked when language is changed")]
         [Tooltip("This event is invoked every time the selected language is changed.")]
         public UnityEvent Localize = new UnityEvent();
 

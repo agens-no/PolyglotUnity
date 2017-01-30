@@ -43,7 +43,8 @@ namespace Polyglot
 #if UNITY_5
         [UsedImplicitly]
 #endif
-        public void Start()
+
+        public void OnEnable()
         {
             Localization.Instance.AddOnLocalizeEvent(this);
         }

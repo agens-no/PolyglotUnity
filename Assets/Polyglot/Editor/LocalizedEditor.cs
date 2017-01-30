@@ -19,7 +19,7 @@ namespace Polyglot
         {
             EditorGUI.BeginChangeCheck();
             serializedObject.Update();
-            SerializedProperty iterator = serializedObject.GetIterator();
+            var iterator = serializedObject.GetIterator();
             for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
             {
                 EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);

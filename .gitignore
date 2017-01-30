@@ -38,3 +38,6 @@ ProjectSettings/UnityAnalyticsManager.asset
 ProjectSettings/UnityAdsSettings.asset
 ProjectSettings/ClusterInputManager.asset
 ProjectSettings/UnityConnectSettings.asset
+/Assets/Jetbrains.meta
+Jetbrains
+.idea
