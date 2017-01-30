@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 namespace Polyglot
 {
-#if UNITY_5_2
+#if UNITY_5_2 || UNITY_5_3 || UNITY_5_4_OR_NEWER
     [RequireComponent(typeof(Dropdown))]
 #endif
     [AddComponentMenu("UI/Language Dropdown", 36)]
     public class LanguageDropdown : MonoBehaviour, ILocalize
     {
-#if UNITY_5_2 || UNITY_5_3
+#if UNITY_5_2 || UNITY_5_3 || UNITY_5_4_OR_NEWER
         [Tooltip("The dropdown to populate with all the available languages")]
 
         [SerializeField]
@@ -60,7 +60,7 @@ namespace Polyglot
 #endif
         public void OnLocalize()
         {
-#if UNITY_5_2 || UNITY_5_3 || UNITY_5_4
+#if UNITY_5_2 || UNITY_5_3 || UNITY_5_4_OR_NEWER
             dropdown.onValueChanged.RemoveListener(Localization.Instance.SelectLanguage);
             dropdown.value = Localization.Instance.SelectedLanguageIndex;
             dropdown.onValueChanged.AddListener(Localization.Instance.SelectLanguage);
