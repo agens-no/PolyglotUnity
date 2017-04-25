@@ -1,6 +1,6 @@
 # PolyglotUnity
 
-A Unity3d plugin for Polyglot Localization that makes it possible to keep the localization editing in a google drive spreadsheet.
+A Unity3d plugin for Polyglot Localization, which is a project that translates games to many languages. This plugin makes it possible to automatically download the polyglot master spreadsheet and a custom game specific spreadsheet and parses it in a unity project.
 
 ## Unity Version
 
@@ -22,7 +22,7 @@ If you use this library and are happy with it consider sending out a tweet menti
 
 ## First, you need to Configurate the Localization.
 You do this by selecting the Configurate menu item from within Unity.
-This will create the StickerPack asset for you if it is not set up yet and then select it.
+This will create the Localization asset for you if it is not set up yet and then select it.
 
 ![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/Configurate.png)
 
@@ -39,6 +39,7 @@ This will create the StickerPack asset for you if it is not set up yet and then 
 
 ## Current Features
 - Download latest polyglot master sheet as CSV or TSV
+- Download a custom localization sheet as CSV or TSV
 - Import the downloaded file and parse it
 - Managing localizations
 	- Specify any number of csv or tsv files to parse
