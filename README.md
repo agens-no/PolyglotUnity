@@ -30,7 +30,7 @@ This will create the Localization asset for you if it is not set up yet and then
 
 ![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/Configurate.png)
 
-## Then you can specify the settings for the sticker pack.
+## Then you can specify the localization settings for the project.
 
 ![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/LocalizationAsset.png)
 
