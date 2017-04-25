@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 232629760}
-  key: MENU_LABEL_CONFIRM_BUTTON
+  key: MENU_LABEL_CO
 --- !u!114 &232629760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -445,7 +445,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: '[MENU_LABEL_CO]'
 --- !u!222 &232629761
 CanvasRenderer:
   m_ObjectHideFlags: 0
