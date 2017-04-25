@@ -20,6 +20,22 @@ If you use this library and are happy with it consider sending out a tweet menti
 
 [<img src="http://static.agens.no/images/agens_logo_w_slogan_avenir_medium.png" width="340" />](http://agens.no/)
 
+## First, you need to Configurate the Localization.
+You do this by selecting the Configurate menu item from within Unity.
+This will create the StickerPack asset for you if it is not set up yet and then select it.
+
+![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/Configurate.png)
+
+## Then you can specify the settings for the sticker pack.
+
+![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/LocalizationAsset.png)
+
+## Finally you can add Localized Text components to your Text objects
+
+![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/LocalizedText.gif)
+
+## Theres also a Language Dropdown script that automatically populates a Dropdown with the available languages
+![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/LanguageDropdown.png)
 
 ## Current Features
 - Download latest polyglot master sheet as CSV or TSV

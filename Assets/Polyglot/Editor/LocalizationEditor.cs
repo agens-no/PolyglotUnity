@@ -1,6 +1,3 @@
-#if UNITY_5_3_OR_NEWER
-using JetBrains.Annotations;
-#endif
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -9,9 +6,6 @@ using UnityEngine.Networking;
 
 namespace Polyglot
 {
-#if UNITY_5
-    [UsedImplicitly]
-#endif
     [CustomEditor(typeof(Localization))]
     public class LocalizationInspector : Editor
     {
@@ -30,18 +24,22 @@ namespace Polyglot
         private const string OfficialSheet = "17f0dQawb-s_Fd7DHgmVvJoEGDMH_yoSd8EYigrb0zmM";
         private const string OfficialGId = "296134756";
 
-#if UNITY_5_3_OR_NEWER
-        [UsedImplicitly]
-#endif
-        [MenuItem("Assets/Polyglot Localization")]
-        public static void CreateLocalization()
+        private const string MenuItemPath = "Window/Polyglot Localization/";
+
+        private const string LocalizationAssetName = "Localization";
+        private const string LocalizationAssetPath = "Assets/Polyglot/Resources/"+LocalizationAssetName+".asset";
+
+        [MenuItem(MenuItemPath + "Configurate", false, 0)]
+        public static void Configurate()
         {
-            var asset = Resources.Load<Localization>("Localization");
+            var asset = Resources.Load<Localization>(LocalizationAssetName);
             if (asset == null)
             {
                 asset = CreateInstance<Localization>();
-                ProjectWindowUtil.CreateAsset(asset, "Localization.asset");
+                var assetPathAndName = AssetDatabase.GenerateUniqueAssetPath (LocalizationAssetPath);
+                AssetDatabase.CreateAsset(asset, assetPathAndName);
             }
+
             Selection.activeObject = asset;
         }
 
@@ -68,7 +66,7 @@ namespace Polyglot
 
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.LabelField("Importer Settings", (GUIStyle)"IN TitleText");
+            EditorGUILayout.LabelField("Polyglot Localization Settings", (GUIStyle)"IN TitleText");
 
             DisplayDocsAndSheetId("Official Polyglot Master", true, false, PathPrefs, 0, DocsIdPrefs, OfficialSheet, SheetIdPrefs, OfficialGId, FormatIdPrefs, LocalizationAssetFormat.CSV);
 
@@ -134,7 +132,7 @@ namespace Polyglot
             EditorGUILayout.EndVertical();
         }
 
-        [MenuItem("Assets/Import latest Polyglot Mastersheet", false, 30)]
+        [MenuItem(MenuItemPath + "Download Polyglot Mastersheet", false, 30)]
         private static void DownloadMasterSheet()
         {
             var defaultPath = string.Empty;
@@ -146,13 +144,13 @@ namespace Polyglot
             DownloadGoogleSheet(EditorPrefs.GetString(DocsIdPrefs, OfficialSheet), EditorPrefs.GetString(SheetIdPrefs, OfficialGId), (LocalizationAssetFormat)EditorPrefs.GetInt(FormatIdPrefs), PathPrefs, defaultPath);
         }
 
-        [MenuItem("Assets/Import latest Custom Sheet", true, 30)]
+        [MenuItem(MenuItemPath + "Download Custom Sheet", true, 30)]
         private static bool ValidateDownloadCustomSheet()
         {
             return !string.IsNullOrEmpty(EditorPrefs.GetString(CustomDocsIdPrefs)) && !string.IsNullOrEmpty(EditorPrefs.GetString(CustomSheetIdPrefs));
         }
 
-        [MenuItem("Assets/Import latest Custom Sheet", false, 30)]
+        [MenuItem(MenuItemPath + "Download Custom Sheet", false, 30)]
         private static void DownloadCustomSheet()
         {
             var defaultPath = string.Empty;
@@ -166,10 +164,7 @@ namespace Polyglot
 
         private static void DownloadGoogleSheet(string docsId, string sheetId, LocalizationAssetFormat format, string prefs, string defaultPath)
         {
-            EditorUtility.DisplayProgressBar("Download", "Downloading...", 0);
-            Debug.Log("docsId: " + docsId);
-            Debug.Log("sheetId: " + sheetId);
-            Debug.Log("format: " + format);
+            EditorUtility.DisplayCancelableProgressBar("Download", "Downloading...", 0);
             var url = string.Format("https://docs.google.com/spreadsheets/d/{0}/export?format={2}&gid={1}", docsId, sheetId, Enum.GetName(typeof(LocalizationAssetFormat), format).ToLower());
             Debug.Log(url);
 #if UNITY_5_5_OR_NEWER
