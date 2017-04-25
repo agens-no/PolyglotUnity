@@ -1,6 +1,10 @@
 # PolyglotUnity
 
+[<img src="http://i2.photobucket.com/albums/y39/karmis/Polyglot/parrot_medium_zpsomejqg3q.png" />]
+
 A Unity3d plugin for Polyglot Localization, which is a project that translates games to many languages. This plugin makes it possible to automatically download the polyglot master spreadsheet and a custom game specific spreadsheet and parses it in a unity project.
+
+https://docs.google.com/spreadsheets/d/17f0dQawb-s_Fd7DHgmVvJoEGDMH_yoSd8EYigrb0zmM/
 
 ## Unity Version
 
