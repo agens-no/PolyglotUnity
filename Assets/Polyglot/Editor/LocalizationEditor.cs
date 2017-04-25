@@ -39,9 +39,9 @@ namespace Polyglot
         private static void DeletePath(string key, int index)
         {
             var defaultPath = string.Empty;
-            if (Localization.Instance.CSVFiles.Count > index)
+            if (Localization.Instance.InputFiles.Count > index)
             {
-                defaultPath = AssetDatabase.GetAssetPath(Localization.Instance.CSVFiles[index]);
+                defaultPath = AssetDatabase.GetAssetPath(Localization.Instance.InputFiles[index].TextAsset);
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -111,12 +111,12 @@ namespace Polyglot
         private static void DownloadMasterCSV()
         {
             var defaultPath = string.Empty;
-            if (Localization.Instance.CSVFiles.Count > 0)
+            if (Localization.Instance.InputFiles.Count > 0)
             {
-                defaultPath = AssetDatabase.GetAssetPath(Localization.Instance.CSVFiles[0]);
+                defaultPath = AssetDatabase.GetAssetPath(Localization.Instance.InputFiles[0].TextAsset);
             }
 
-            DownloadGoogleCSV(EditorPrefs.GetString(docsIdPrefs, "17f0dQawb-s_Fd7DHgmVvJoEGDMH_yoSd8EYigrb0zmM"), EditorPrefs.GetString(sheetIdPrefs, "296134756"), "polyglotpath", defaultPath);
+            DownloadGoogleCSV(EditorPrefs.GetString(docsIdPrefs, "17f0dQawb-s_Fd7DHgmVvJoEGDMH_yoSd8EYigrb0zmM"), "csv", EditorPrefs.GetString(sheetIdPrefs, "296134756"), "polyglotpath", defaultPath);
         }
 
         [MenuItem("Assets/Import latest Custom Sheet", true, 30)]
@@ -129,28 +129,28 @@ namespace Polyglot
         private static void DownloadCustomCSV()
         {
             var defaultPath = string.Empty;
-            if (Localization.Instance.CSVFiles.Count > 1)
+            if (Localization.Instance.InputFiles.Count > 1)
             {
-                defaultPath = AssetDatabase.GetAssetPath(Localization.Instance.CSVFiles[1]);
+                defaultPath = AssetDatabase.GetAssetPath(Localization.Instance.InputFiles[1].TextAsset);
             }
 
-			DownloadGoogleCSV(EditorPrefs.GetString(customDocsIdPrefs), EditorPrefs.GetString(customSheetIdPrefs), "polyglotcustompath", defaultPath);
+			DownloadGoogleCSV(EditorPrefs.GetString(customDocsIdPrefs), EditorPrefs.GetString(customSheetIdPrefs), "tsv", "polyglotcustompath", defaultPath);
         }
 
-        private static void DownloadGoogleCSV(string docsId, string sheetId, string prefs, string defaultPath)
+        private static void DownloadGoogleCSV(string docsId, string sheetId, string format, string prefs, string defaultPath)
         {
-            EditorUtility.DisplayProgressBar("Download CSV", "Downloading...", 0);
-            var www = new WWW(String.Format("https://docs.google.com/spreadsheets/d/{0}/export?format=csv&gid={1}", docsId, sheetId));
+            EditorUtility.DisplayProgressBar("Download", "Downloading...", 0);
+            var www = new WWW(String.Format("https://docs.google.com/spreadsheets/d/{0}/export?format={2}&gid={1}", docsId, sheetId, format));
             while (!www.isDone)
             {
-                EditorUtility.DisplayProgressBar("Download CSV", "Downloading...", www.progress);
+                EditorUtility.DisplayProgressBar("Download", "Downloading...", www.progress);
             }
             EditorUtility.ClearProgressBar();
             var path = EditorPrefs.GetString(prefs, defaultPath);
 
             if (string.IsNullOrEmpty(path))
             {
-                path = EditorUtility.SaveFilePanelInProject("Save CSV", "", "csv", "Please enter a file name to save the csv to", path);
+                path = EditorUtility.SaveFilePanelInProject("Save Localization", "", "txt", "Please enter a file name to save the csv to", path);
                 EditorPrefs.SetString(prefs, path);
             }
             if (string.IsNullOrEmpty(path))

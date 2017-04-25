@@ -5,6 +5,35 @@ using UnityEngine;
 
 namespace Polyglot
 {
+    [Serializable]
+    public enum LocalizationAssetFormat
+    {
+        CSV,
+        TSV
+    }
+
+    [Serializable]
+    public class LocalizationAsset
+    {
+        [SerializeField]
+        private TextAsset textAsset;
+
+        [SerializeField]
+        private LocalizationAssetFormat format = LocalizationAssetFormat.CSV;
+
+        public TextAsset TextAsset
+        {
+            get { return textAsset; }
+            set { textAsset = value; }
+        }
+
+        public LocalizationAssetFormat Format
+        {
+            get { return format; }
+            set { format = value; }
+        }
+    }
+
     public static class LocalizationImporter
     {
         /// <summary>
@@ -14,7 +43,7 @@ namespace Polyglot
 
         private static List<string> EmptyList = new List<string>();
 
-        private static List<TextAsset> CSVFiles = new List<TextAsset>();
+        private static List<LocalizationAsset> InputFiles = new List<LocalizationAsset>();
 
         static LocalizationImporter()
         {
@@ -24,30 +53,31 @@ namespace Polyglot
                 Debug.LogError("Could not find a Localization Settings file in Resources.");
                 return;
             }
-            Init(settings.CSVFiles);
+            Init(settings.InputFiles);
         }
 
-        private static void Init(List<TextAsset> csvFiles)
+        private static void Init(List<LocalizationAsset> csvFiles)
         {
-            CSVFiles.Clear();
-            CSVFiles.AddRange(csvFiles);
+            InputFiles.Clear();
+            InputFiles.AddRange(csvFiles);
         }
 
         private static void PopulateLanguageStrings()
         {
-            for (var index = 0; index < CSVFiles.Count; index++)
+            for (var index = 0; index < InputFiles.Count; index++)
             {
-                var textAsset = CSVFiles[index];
+                var inputAsset = InputFiles[index];
 
-                if (textAsset == null)
+                if (inputAsset == null)
                 {
                     Debug.LogError("CSVFiles[" + index + "] is null");
                     continue;
                 }
 
-                var text = textAsset.text;
+                var text = inputAsset.TextAsset.text;
                 var lines = text.Split('\n');
                 var canBegin = false;
+                var csv = inputAsset.Format == LocalizationAssetFormat.CSV;
                 for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
                 {
                     var line = lines[lineIndex];
@@ -71,7 +101,9 @@ namespace Polyglot
                         break;
                     }
 
-                    var keys = line.Split(',').ToList();
+                    var split = csv ? ',' : '\t';
+
+                    var keys = line.Split(split).ToList();
                     var key = keys[0];
 
                     if (string.IsNullOrEmpty(key) || IsLineBreak(key) || keys.Count <= 1)
@@ -87,7 +119,7 @@ namespace Polyglot
 
                     if (languageStrings.ContainsKey(key))
                     {
-                        Debug.Log("The key '" + key + "' already exist, but is now overwritten by a csv (" + textAsset.name + ") with higher priority (" + index + ")");
+                        Debug.Log("The key '" + key + "' already exist, but is now overwritten by a csv (" + inputAsset.TextAsset.name + ") with higher priority (" + index + ")");
                         languageStrings[key] = keys;
                         continue;
                     }
@@ -182,6 +214,11 @@ namespace Polyglot
         {
             languageStrings.Clear();
             PopulateLanguageStrings();
+        }
+
+        public static List<string> GetKeys()
+        {
+            return languageStrings.Keys.ToList();
         }
     }
 }

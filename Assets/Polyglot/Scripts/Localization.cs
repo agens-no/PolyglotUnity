@@ -1,4 +1,4 @@
-﻿#if UNITY_5
+﻿#if UNITY_5_3_OR_NEWER
 using JetBrains.Annotations;
 #endif
 using UnityEngine;
@@ -14,9 +14,9 @@ namespace Polyglot
 
         [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always prioritized.")]
         [SerializeField]
-        private List<TextAsset> csvFiles;
+        private List<LocalizationAsset> inputFiles;
 
-        public List<TextAsset> CSVFiles { get { return csvFiles; } }
+        public List<LocalizationAsset> InputFiles { get { return inputFiles; } }
 
         private static Localization instance;
 
@@ -212,6 +212,11 @@ namespace Polyglot
             var languages = LocalizationImporter.GetLanguages(key);
             var selected = (int) Instance.selectedLanguage;
             return languages.Count > 0 && Instance.selectedLanguage >= 0 && selected < languages.Count;
+        }
+
+        public static List<string> GetKeys()
+        {
+            return LocalizationImporter.GetKeys();
         }
 
         /// <summary>
