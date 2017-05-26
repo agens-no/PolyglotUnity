@@ -1,4 +1,4 @@
-﻿#if TEXTMESH_PRO
+﻿#if TMP_PRESENT
 using Polyglot;
 using UnityEngine;
 using TMPro;

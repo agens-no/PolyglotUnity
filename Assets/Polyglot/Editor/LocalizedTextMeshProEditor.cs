@@ -1,4 +1,4 @@
-﻿#if TEXTMESH_PRO
+﻿#if TMP_PRESENT
 #if UNITY_5
 using JetBrains.Annotations;
 #endif
