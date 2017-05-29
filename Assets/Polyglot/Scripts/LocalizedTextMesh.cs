@@ -1,4 +1,5 @@
-﻿#if UNITY_5
+﻿
+#if UNITY_5 || UNITY_2017_1_OR_NEWER
 using JetBrains.Annotations;
 #endif
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Polyglot
 
         public string Key { get { return key; } }
 
-#if UNITY_5
+#if UNITY_5 || UNITY_2017_1_OR_NEWER
         [UsedImplicitly]
 #endif
         public void Reset()
@@ -28,7 +29,7 @@ namespace Polyglot
             text = GetComponent<TextMesh>();
         }
 
-#if UNITY_5
+#if UNITY_5 || UNITY_2017_1_OR_NEWER
         [UsedImplicitly]
 #endif
         public void Start()

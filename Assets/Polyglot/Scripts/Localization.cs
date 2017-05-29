@@ -1,4 +1,6 @@
-﻿#if UNITY_5_3_OR_NEWER
+﻿
+using System;
+#if UNITY_5_3_OR_NEWER
 using JetBrains.Annotations;
 #endif
 using UnityEngine;
@@ -53,6 +55,8 @@ namespace Polyglot
         [SerializeField]
         private List<Language> supportedLanguages;
 
+        public List<Language> SupportedLanguages{ get { return supportedLanguages; }}
+
         [Tooltip("The currently selected language of the game.\nThis will also be the default when you start the game for the first time.")]
         [SerializeField]
         private Language selectedLanguage = Language.English;
@@ -106,8 +110,11 @@ namespace Polyglot
             {
                 if (IsLanguageSupported(value))
                 {
-                    selectedLanguage = value;
-                    InvokeOnLocalize();
+                    if (value != selectedLanguage)
+                    {
+                        selectedLanguage = value;
+                        InvokeOnLocalize();
+                    }
                 }
                 else
                 {
@@ -142,7 +149,7 @@ namespace Polyglot
         /// <summary>
         /// The english name of the selected language.
         /// </summary>
-        public string EnglishLanguageName { get { return Get("MENU_LANGUAGE_THIS_EN"); } }
+        public string EnglishLanguageName { get { return Get("LANGUAGE_EN"); } }
 
         /// <summary>
         /// The Localized name of the selected language.
@@ -157,11 +164,127 @@ namespace Polyglot
         {
             if (supportedLanguages == null || supportedLanguages.Count == 0)
             {
-                SelectedLanguage = (Language) selected;
+                SelectLanguage((Language) selected);
             }
             else
             {
                 SelectedLanguage = supportedLanguages[selected];
+            }
+        }
+
+        public void SelectLanguage(Language selected)
+        {
+            Debug.Log(selected);
+            SelectedLanguage = selected;
+        }
+
+        public Language ConvertSystemLanguage(SystemLanguage selected)
+        {
+            switch (selected)
+            {
+                case SystemLanguage.Arabic:
+                    return Language.Arabic;
+                case SystemLanguage.Bulgarian:
+                    return Language.Bulgarian;
+                case SystemLanguage.Czech:
+                    return Language.Czech;
+                case SystemLanguage.Danish:
+                    return Language.Danish;
+                case SystemLanguage.Dutch:
+                    return Language.Dutch;
+                case SystemLanguage.English:
+                    return Language.English;
+                case SystemLanguage.Finnish:
+                    return Language.Finnish;
+                case SystemLanguage.French:
+                    return Language.French;
+                case SystemLanguage.German:
+                    return Language.German;
+                case SystemLanguage.Greek:
+                    return Language.Greek;
+                case SystemLanguage.Hebrew:
+                    return Language.Hebrew;
+                case SystemLanguage.Hungarian:
+                    return Language.Hungarian;
+                case SystemLanguage.Indonesian:
+                    return Language.Indonesian;
+                case SystemLanguage.Italian:
+                    return Language.Italian;
+                case SystemLanguage.Japanese:
+                    return Language.Japanese;
+                case SystemLanguage.Korean:
+                    return Language.Korean;
+                case SystemLanguage.Norwegian:
+                    return Language.Norwegian;
+                case SystemLanguage.Polish:
+                    return Language.Polish;
+                case SystemLanguage.Portuguese:
+                    return Language.Portuguese;
+                case SystemLanguage.Romanian:
+                    return Language.Romanian;
+                case SystemLanguage.Russian:
+                    return Language.Russian;
+                case SystemLanguage.Spanish:
+                    return Language.Spanish;
+                case SystemLanguage.Swedish:
+                    return Language.Swedish;
+                case SystemLanguage.Thai:
+                    return Language.Thai;
+                case SystemLanguage.Turkish:
+                    return Language.Turkish;
+                case SystemLanguage.ChineseSimplified:
+                    return Language.Simplified_Chinese;
+                case SystemLanguage.ChineseTraditional:
+                    return Language.Traditional_Chinese;
+                /*case SystemLanguage.Afrikaans:
+                    return Language.Afrikaans;
+                    break;
+                case SystemLanguage.Basque:
+                    return Language.Basque;
+                    break;
+                case SystemLanguage.Belarusian:
+                    return Language.Belarusian;
+                    break;
+                case SystemLanguage.Catalan:
+                    return Language.Catalan;
+                    break;
+                case SystemLanguage.Chinese:
+                    return Language.Chinese;
+                    break;
+                case SystemLanguage.Estonian:
+                    return Language.Estonian;
+                    break;
+                case SystemLanguage.Faroese:
+                    return Language.Faroese;
+                    break;
+                case SystemLanguage.Icelandic:
+                    return Language.Icelandic;
+                    break;
+                case SystemLanguage.Latvian:
+                    return Language.Latvian;
+                    break;
+                case SystemLanguage.Lithuanian:
+                    return Language.Lithuanian;
+                    break;
+                case SystemLanguage.SerboCroatian:
+                    return Language.SerboCroatian;
+                    break;
+                case SystemLanguage.Slovak:
+                    return Language.Slovak;
+                    break;
+                case SystemLanguage.Slovenian:
+                    return Language.Slovenian;
+                    break;
+                case SystemLanguage.Ukrainian:
+                    return Language.Ukrainian;
+                    break;
+                case SystemLanguage.Vietnamese:
+                    return Language.Vietnamese;
+                    break;
+                case SystemLanguage.Unknown:
+                    break;*/
+                default:
+                    return selectedLanguage;
             }
         }
 
@@ -191,14 +314,19 @@ namespace Polyglot
         /// <returns>A localized string</returns>
         public static string Get(string key)
         {
+            return Get(key, Instance.selectedLanguage);
+        }
+
+        public static string Get(string key, Language language)
+        {
             var languages = LocalizationImporter.GetLanguages(key);
-            var selected = (int) Instance.selectedLanguage;
-            if (languages.Count > 0 && Instance.selectedLanguage >= 0 && selected < languages.Count)
+            var selected = (int) language;
+            if (languages.Count > 0 && selected >= 0 && selected < languages.Count)
             {
                 var currentString = languages[selected];
                 if (string.IsNullOrEmpty(currentString) || LocalizationImporter.IsLineBreak(currentString))
                 {
-                    Debug.LogWarning("Could not find key " + key + " for current language " + Instance.selectedLanguage + ". Falling back to " + Instance.fallbackLanguage + " with " + languages[(int)Instance.fallbackLanguage]);
+                    Debug.LogWarning("Could not find key " + key + " for current language " + language + ". Falling back to " + Instance.fallbackLanguage + " with " + languages[(int)Instance.fallbackLanguage]);
                     currentString = languages[(int)Instance.fallbackLanguage];
                 }
                 return currentString;

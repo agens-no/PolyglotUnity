@@ -6,10 +6,11 @@ using UnityEditor.AnimatedValues;
 
 namespace Polyglot
 {
+
 #if UNITY_5
     [UsedImplicitly]
 #endif
-    [CustomEditor(typeof(LocalizedText))]
+    [CustomEditor(typeof(LocalizedText), true)]
     [CanEditMultipleObjects]
     public class LocalizedTextEditor : LocalizedEditor<LocalizedText>
     {
@@ -20,7 +21,7 @@ namespace Polyglot
             base.OnEnable();
             showParameters = new AnimBool(true);
             showParameters.valueChanged.AddListener(Repaint);
-    }
+        }
 
         public override void OnInspectorGUI()
         {

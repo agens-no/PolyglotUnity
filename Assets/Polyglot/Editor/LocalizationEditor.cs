@@ -124,7 +124,6 @@ namespace Polyglot
             if(GUILayout.Button("Download"))
             {
                 DownloadGoogleSheet(docsId, sheetId, formatId, pathPrefs, string.Empty);
-
             }
             EditorGUILayout.EndHorizontal();
             EditorGUI.EndDisabledGroup();
@@ -215,6 +214,8 @@ namespace Polyglot
 
             Debug.Log("Importing " + path);
             AssetDatabase.ImportAsset(path);
+
+            LocalizationImporter.Refresh();
         }
     }
 }

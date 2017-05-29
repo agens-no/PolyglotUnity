@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-#if UNITY_5
+#if UNITY_5 || UNITY_2017_1_OR_NEWER
 using JetBrains.Annotations;
 #endif
 using UnityEngine;
@@ -32,7 +32,7 @@ namespace Polyglot
 
         private List<object> parameters = new List<object>();
 
-#if UNITY_5
+#if UNITY_5 || UNITY_2017_1_OR_NEWER
         [UsedImplicitly]
 #endif
         public void Reset()
@@ -40,7 +40,7 @@ namespace Polyglot
             text = GetComponent<T>();
         }
 
-#if UNITY_5
+#if UNITY_5 || UNITY_2017_1_OR_NEWER
         [UsedImplicitly]
 #endif
 
