@@ -42,6 +42,34 @@ namespace Polyglot
 
             Selection.activeObject = asset;
         }
+        
+        #region Prefs
+
+        private static string GetPrefsString(string key, string defaultString = null)
+        {
+            return EditorPrefs.GetString(Application.productName + "." + key, defaultString);
+        }
+        private static void SetPrefsString(string key, string value)
+        {
+            EditorPrefs.SetString(Application.productName + "." + key, value);
+        }
+        private static int GetPrefsInt(string key, int defaultInt = 0)
+        {
+            return EditorPrefs.GetInt(Application.productName + "." + key, defaultInt);
+        }
+        private static void SetPrefsInt(string key, int value)
+        {
+            EditorPrefs.SetInt(Application.productName + "." + key, value);
+        }
+        private static bool HasPrefsKey(string key)
+        {
+            return EditorPrefs.HasKey(Application.productName + "." + key);
+        }
+        private static void DeletePrefsKey(string key)
+        {
+            EditorPrefs.DeleteKey(Application.productName + "." + key);
+        }
+        #endregion
 
         private static void DeletePath(string key, int index)
         {
@@ -53,12 +81,12 @@ namespace Polyglot
 
             EditorGUILayout.BeginHorizontal();
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.TextField(EditorPrefs.GetString(key, defaultPath));
+            EditorGUILayout.TextField(GetPrefsString(key, defaultPath));
             EditorGUI.EndDisabledGroup();
-            EditorGUI.BeginDisabledGroup(!EditorPrefs.HasKey(key));
+            EditorGUI.BeginDisabledGroup(!HasPrefsKey(key));
             if (GUILayout.Button("Clear"))
             {
-                EditorPrefs.DeleteKey(key);
+                DeletePrefsKey(key);
             }
             EditorGUILayout.EndHorizontal();
             EditorGUI.EndDisabledGroup();
@@ -93,25 +121,25 @@ namespace Polyglot
             EditorGUILayout.LabelField(title, (GUIStyle)"IN TitleText");
             EditorGUI.BeginDisabledGroup(disableId);
             EditorGUI.BeginChangeCheck();
-            var docsId = EditorGUILayout.TextField("Docs Id", EditorPrefs.GetString(docs, defaultDocs));
+            var docsId = EditorGUILayout.TextField("Docs Id", GetPrefsString(docs, defaultDocs));
             if (EditorGUI.EndChangeCheck())
             {
-                EditorPrefs.SetString(docs, docsId);
+                SetPrefsString(docs, docsId);
             }
             EditorGUI.BeginChangeCheck();
-            var sheetId = EditorGUILayout.TextField("Sheet Id", EditorPrefs.GetString(sheet, defaultSheet));
+            var sheetId = EditorGUILayout.TextField("Sheet Id", GetPrefsString(sheet, defaultSheet));
             if (EditorGUI.EndChangeCheck())
             {
-                EditorPrefs.SetString(sheet, sheetId);
+                SetPrefsString(sheet, sheetId);
             }
             EditorGUI.EndDisabledGroup();
 
             EditorGUI.BeginDisabledGroup(disableOpen);
             EditorGUI.BeginChangeCheck();
-            var formatId = (LocalizationAssetFormat)EditorGUILayout.EnumPopup("Format", (LocalizationAssetFormat)EditorPrefs.GetInt(format, (int)defaultFormat));
+            var formatId = (LocalizationAssetFormat)EditorGUILayout.EnumPopup("Format", (LocalizationAssetFormat)GetPrefsInt(format, (int)defaultFormat));
             if (EditorGUI.EndChangeCheck())
             {
-                EditorPrefs.SetInt(format, (int)formatId);
+                SetPrefsInt(format, (int)formatId);
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -140,13 +168,13 @@ namespace Polyglot
                 defaultPath = AssetDatabase.GetAssetPath(Localization.Instance.InputFiles[0].TextAsset);
             }
 
-            DownloadGoogleSheet(EditorPrefs.GetString(DocsIdPrefs, OfficialSheet), EditorPrefs.GetString(SheetIdPrefs, OfficialGId), (LocalizationAssetFormat)EditorPrefs.GetInt(FormatIdPrefs), PathPrefs, defaultPath);
+            DownloadGoogleSheet(GetPrefsString(DocsIdPrefs, OfficialSheet), GetPrefsString(SheetIdPrefs, OfficialGId), (LocalizationAssetFormat)GetPrefsInt(FormatIdPrefs), PathPrefs, defaultPath);
         }
 
         [MenuItem(MenuItemPath + "Download Custom Sheet", true, 30)]
         private static bool ValidateDownloadCustomSheet()
         {
-            return !string.IsNullOrEmpty(EditorPrefs.GetString(CustomDocsIdPrefs)) && !string.IsNullOrEmpty(EditorPrefs.GetString(CustomSheetIdPrefs));
+            return !string.IsNullOrEmpty(GetPrefsString(CustomDocsIdPrefs)) && !string.IsNullOrEmpty(GetPrefsString(CustomSheetIdPrefs));
         }
 
         [MenuItem(MenuItemPath + "Download Custom Sheet", false, 30)]
@@ -158,7 +186,7 @@ namespace Polyglot
                 defaultPath = AssetDatabase.GetAssetPath(Localization.Instance.InputFiles[1].TextAsset);
             }
 
-			DownloadGoogleSheet(EditorPrefs.GetString(CustomDocsIdPrefs), EditorPrefs.GetString(CustomSheetIdPrefs), (LocalizationAssetFormat)EditorPrefs.GetInt(CustomFormatIdPrefs), CustomPathPrefs, defaultPath);
+			DownloadGoogleSheet(GetPrefsString(CustomDocsIdPrefs), GetPrefsString(CustomSheetIdPrefs), (LocalizationAssetFormat)GetPrefsInt(CustomFormatIdPrefs), CustomPathPrefs, defaultPath);
         }
 
         private static void DownloadGoogleSheet(string docsId, string sheetId, LocalizationAssetFormat format, string prefs, string defaultPath)
@@ -186,12 +214,12 @@ namespace Polyglot
                 }
             }
             EditorUtility.ClearProgressBar();
-            var path = EditorPrefs.GetString(prefs, defaultPath);
+            var path = GetPrefsString(prefs, defaultPath);
 
             if (string.IsNullOrEmpty(path))
             {
                 path = EditorUtility.SaveFilePanelInProject("Save Localization", "", "txt", "Please enter a file name to save the csv to", path);
-                EditorPrefs.SetString(prefs, path);
+                SetPrefsString(prefs, path);
             }
             if (string.IsNullOrEmpty(path))
             {

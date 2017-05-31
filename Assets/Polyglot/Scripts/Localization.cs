@@ -13,7 +13,7 @@ namespace Polyglot
     public class Localization : ScriptableObject
     {
         private const string KeyNotFound = "[{0}]";
-
+        
         [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always prioritized.")]
         [SerializeField]
         private List<LocalizationAsset> inputFiles;
