@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 #if UNITY_5_3_OR_NEWER
 using JetBrains.Annotations;
 #endif
@@ -9,10 +10,59 @@ using UnityEngine.Events;
 
 namespace Polyglot
 {
+    [Serializable]
+    public class LocalizationDocument
+    {
+        [SerializeField]
+        private string docsId;
+        [SerializeField]
+        private string sheetId;
+        [SerializeField]
+        private LocalizationAssetFormat format;
+        [SerializeField]
+        private TextAsset textAsset;
+
+        public TextAsset TextAsset
+        {
+            get { return textAsset; }
+            set { textAsset = value; }
+        }
+
+        public string DocsId
+        {
+            get { return docsId; }
+            set { docsId = value; }
+        }
+
+        public string SheetId
+        {
+            get { return sheetId; }
+            set { sheetId = value; }
+        }
+
+        public LocalizationAssetFormat Format
+        {
+            get { return format; }
+            set { format = value; }
+        }
+    }
+    
+    
     [CreateAssetMenu(fileName = "Localization.asset", menuName = "Polyglot Localization")]
     public class Localization : ScriptableObject
     {
         private const string KeyNotFound = "[{0}]";
+
+        [SerializeField]
+        private LocalizationDocument polyglotDocument;
+
+        public LocalizationDocument PolyglotDocument { get { return polyglotDocument; } }
+        
+
+        [SerializeField]
+        private LocalizationDocument customDocument;
+
+        public LocalizationDocument CustomDocument { get { return customDocument; } }
         
         [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always prioritized.")]
         [SerializeField]

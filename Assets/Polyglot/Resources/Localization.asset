@@ -11,10 +11,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b4bc5aeb29cde458fe1bd25d63edaa, type: 3}
   m_Name: Localization
   m_EditorClassIdentifier: 
+  polyglotDocument:
+    docsId: 17f0dQawb-s_Fd7DHgmVvJoEGDMH_yoSd8EYigrb0zmM
+    sheetId: 296134756
+    format: 1
+    textAsset: {fileID: 4900000, guid: c4dc0d059266d8d47862f46460cf8f31, type: 3}
+  customDocument:
+    docsId: 
+    sheetId: 
+    format: 1
+    textAsset: {fileID: 0}
   inputFiles:
   - textAsset: {fileID: 4900000, guid: c4dc0d059266d8d47862f46460cf8f31, type: 3}
-    format: 0
-  supportedLanguages: 000000000100000002000000030000000b000000
+    format: 1
+  supportedLanguages: 000000000b00000003000000010000000600000002000000
   selectedLanguage: 0
   fallbackLanguage: 0
   Localize:

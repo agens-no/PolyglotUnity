@@ -45,57 +45,61 @@ namespace Polyglot
                     continue;
                 }
 
-                var text = inputAsset.TextAsset.text;
-                var lines = text.Split('\n');
-                var canBegin = false;
-                var csv = inputAsset.Format == LocalizationAssetFormat.CSV;
-                for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+                ImportTextFile(inputAsset.TextAsset.text, inputAsset.Format);
+            }
+        }
+
+        public static void ImportTextFile(string text, LocalizationAssetFormat format)
+        {
+            var lines = text.Split('\n');
+            var canBegin = false;
+            var csv = format == LocalizationAssetFormat.CSV;
+            for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+            {
+                var line = lines[lineIndex];
+
+                if (!canBegin)
                 {
-                    var line = lines[lineIndex];
-
-                    if (!canBegin)
+                    if (line.StartsWith("Polyglot") || line.StartsWith("PolyMaster") || line.StartsWith("BEGIN"))
                     {
-                        if (line.StartsWith("Polyglot") || line.StartsWith("PolyMaster") || line.StartsWith("BEGIN"))
-                        {
-                            canBegin = true;
-                            continue;
-                        }
-                    }
-
-                    if (!canBegin)
-                    {
+                        canBegin = true;
                         continue;
                     }
-
-                    if (line.StartsWith("END"))
-                    {
-                        break;
-                    }
-
-                    var split = csv ? ',' : '\t';
-
-                    var keys = line.Split(split).ToList();
-                    var key = keys[0];
-
-                    if (string.IsNullOrEmpty(key) || IsLineBreak(key) || keys.Count <= 1)
-                    {
-                        //Ignore empty lines in the sheet
-                        continue;
-                    }
-
-                    //Remove key
-                    keys.RemoveAt(0);
-                    //Remove description
-                    keys.RemoveAt(0);
-
-                    if (languageStrings.ContainsKey(key))
-                    {
-                        Debug.Log("The key '" + key + "' already exist, but is now overwritten by a csv (" + inputAsset.TextAsset.name + ") with higher priority (" + index + ")");
-                        languageStrings[key] = keys;
-                        continue;
-                    }
-                    languageStrings.Add(key, keys);
                 }
+
+                if (!canBegin)
+                {
+                    continue;
+                }
+
+                if (line.StartsWith("END"))
+                {
+                    break;
+                }
+
+                var split = csv ? ',' : '\t';
+
+                var keys = line.Split(split).ToList();
+                var key = keys[0];
+
+                if (string.IsNullOrEmpty(key) || IsLineBreak(key) || keys.Count <= 1)
+                {
+                    //Ignore empty lines in the sheet
+                    continue;
+                }
+
+                //Remove key
+                keys.RemoveAt(0);
+                //Remove description
+                keys.RemoveAt(0);
+
+                if (languageStrings.ContainsKey(key))
+                {
+                    Debug.Log("The key '" + key + "' already exist, but is now overwritten");
+                    languageStrings[key] = keys;
+                    continue;
+                }
+                languageStrings.Add(key, keys);
             }
         }
 
