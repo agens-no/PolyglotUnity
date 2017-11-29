@@ -8,7 +8,7 @@ https://docs.google.com/spreadsheets/d/17f0dQawb-s_Fd7DHgmVvJoEGDMH_yoSd8EYigrb0
 
 ## Unity Version
 
-Works with Unity 4.x, 5.x and 2017
+Works with Unity 4.x, 5.x and 2017.x
 
 Tested with several Unity Versions
 * Unity 5.4.4f1
@@ -16,7 +16,9 @@ Tested with several Unity Versions
 * Unity 5.6.0f3
 * Unity 5.6.1f1
 * Unity 2017.1.0b1
+* Unity 2017.2.0f3
 * Unity 2017.2.0p2
+* Unity 2017.3.0b10
 
 ## Feedback
 

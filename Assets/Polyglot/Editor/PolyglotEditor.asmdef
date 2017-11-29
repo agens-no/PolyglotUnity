@@ -1,0 +1,10 @@
+{
+    "name": "Polyglot.Editor",
+    "references": [
+        "Polyglot.Scripts"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
