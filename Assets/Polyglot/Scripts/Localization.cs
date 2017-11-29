@@ -384,7 +384,7 @@ namespace Polyglot
     #if ARABSUPPORT_ENABLED
                 if (selected == (int) Language.Arabic)
                 {
-                    return ArabicSupport.ArabicFixer.Fix(currentString);
+                    return ArabicSupport.ArabicFixer.Fix(currentString, true, false);
                 }
     #endif
                 
