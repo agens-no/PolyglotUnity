@@ -41,3 +41,9 @@ ProjectSettings/UnityConnectSettings.asset
 /Assets/Jetbrains.meta
 Jetbrains
 .idea
+
+#Arabic Support plugin
+/Assets/ArabicSupport.meta
+/Assets/ArabicSupport/
+/Assets/TextMesh Pro.Meta
+/Assets/TextMesh Pro/

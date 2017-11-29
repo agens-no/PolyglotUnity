@@ -377,8 +377,17 @@ namespace Polyglot
                 if (string.IsNullOrEmpty(currentString) || LocalizationImporter.IsLineBreak(currentString))
                 {
                     Debug.LogWarning("Could not find key " + key + " for current language " + language + ". Falling back to " + Instance.fallbackLanguage + " with " + languages[(int)Instance.fallbackLanguage]);
-                    currentString = languages[(int)Instance.fallbackLanguage];
+                    selected = (int) Instance.fallbackLanguage;
+                    currentString = languages[selected];
                 }
+
+    #if ARABSUPPORT_ENABLED
+                if (selected == (int) Language.Arabic)
+                {
+                    return ArabicSupport.ArabicFixer.Fix(currentString);
+                }
+    #endif
+                
                 return currentString;
             }
 

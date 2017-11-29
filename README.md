@@ -48,7 +48,9 @@ This will create the Localization asset for you if it is not set up yet and then
 ## Current Features
 - Download latest polyglot master sheet as CSV or TSV
 - Download a custom localization sheet as CSV or TSV
+    - If you use the same keys as the master sheet your keys will override the master sheet.
 - Import the downloaded file and parse it
+    - The sheet is parsed every time you play the game so you can iterate fast.
 - Managing localizations
 	- Specify any number of csv or tsv files to parse
 	- Select language
@@ -60,3 +62,8 @@ This will create the Localization asset for you if it is not set up yet and then
 	- Supports parameters for localized strings such as "No {0} Selected".
 - Script for saving selected language
 	- Saves to PlayerPrefs
+- TextMesh Pro support
+    - Make sure TMP_PRESENT is specified in Player Settings -> Scripting Define Symbols
+- Arabic font type support
+    - Download ArabicSupport.cs from https://github.com/Konash/arabic-support-unity
+    - specify ARABSUPPORT_ENABLED in Player Settings -> Scripting Define Symbols
