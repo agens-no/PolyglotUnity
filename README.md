@@ -15,7 +15,8 @@ Tested with several Unity Versions
 * Unity 5.5.2f1
 * Unity 5.6.0f3
 * Unity 5.6.1f1
-* Unity 2017.1.b1
+* Unity 2017.1.0b1
+* Unity 2017.2.0p2
 
 ## Feedback
 
