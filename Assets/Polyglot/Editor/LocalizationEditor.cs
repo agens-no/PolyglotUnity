@@ -214,7 +214,10 @@ namespace Polyglot
             EditorUtility.DisplayCancelableProgressBar("Download", "Downloading...", 0);
             var url = string.Format("https://docs.google.com/spreadsheets/d/{0}/export?format={2}&gid={1}", docsId, sheetId, Enum.GetName(typeof(LocalizationAssetFormat), format).ToLower());
             Debug.Log(url);
-#if UNITY_5_5_OR_NEWER
+#if UNITY_2017_1_OR_NEWER
+            var www = UnityWebRequest.Get(url);
+            www.SendWebRequest();
+#elif UNITY_5_5_OR_NEWER
             var www = UnityWebRequest.Get(url);
             www.Send();
 #else
