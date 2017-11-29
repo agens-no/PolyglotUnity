@@ -256,8 +256,8 @@ namespace Polyglot
                     return Language.Hebrew;
                 case SystemLanguage.Hungarian:
                     return Language.Hungarian;
-                case SystemLanguage.Indonesian:
-                    return Language.Indonesian;
+                /*case SystemLanguage.Indonesian:
+                    return Language.Indonesian;*/
                 case SystemLanguage.Italian:
                     return Language.Italian;
                 case SystemLanguage.Japanese:
