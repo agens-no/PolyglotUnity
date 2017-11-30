@@ -126,9 +126,16 @@ namespace Polyglot
             {
                 if(iterator.propertyPath.Contains("Document")) continue;
                 
+#if !ARABSUPPORT_ENABLED
+                using (new EditorGUI.DisabledScope("showTashkeel" == iterator.propertyPath || iterator.propertyPath == "useHinduNumbers"))
+#endif
+                
                 using (new EditorGUI.DisabledScope("m_Script" == iterator.propertyPath))
                     EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
             }
+#if !ARABSUPPORT_ENABLED
+#endif
+
             serializedObject.ApplyModifiedProperties();
             if (EditorGUI.EndChangeCheck())
             {

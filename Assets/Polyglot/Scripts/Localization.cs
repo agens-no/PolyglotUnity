@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections;
+﻿using System.Collections;
 #if UNITY_5_3_OR_NEWER
 using JetBrains.Annotations;
 #endif
@@ -10,44 +8,6 @@ using UnityEngine.Events;
 
 namespace Polyglot
 {
-    [Serializable]
-    public class LocalizationDocument
-    {
-        [SerializeField]
-        private string docsId;
-        [SerializeField]
-        private string sheetId;
-        [SerializeField]
-        private LocalizationAssetFormat format;
-        [SerializeField]
-        private TextAsset textAsset;
-
-        public TextAsset TextAsset
-        {
-            get { return textAsset; }
-            set { textAsset = value; }
-        }
-
-        public string DocsId
-        {
-            get { return docsId; }
-            set { docsId = value; }
-        }
-
-        public string SheetId
-        {
-            get { return sheetId; }
-            set { sheetId = value; }
-        }
-
-        public LocalizationAssetFormat Format
-        {
-            get { return format; }
-            set { format = value; }
-        }
-    }
-    
-    
     [CreateAssetMenu(fileName = "Localization.asset", menuName = "Polyglot Localization")]
     public class Localization : ScriptableObject
     {
@@ -69,6 +29,7 @@ namespace Polyglot
         private List<LocalizationAsset> inputFiles;
 
         public List<LocalizationAsset> InputFiles { get { return inputFiles; } }
+
 
         private static Localization instance;
 
@@ -101,6 +62,7 @@ namespace Polyglot
             }
         }
 
+        [Header("Language Support")]
         [Tooltip("The supported languages by the game.\n Leave empty if you support them all.")]
         [SerializeField]
         private List<Language> supportedLanguages;
@@ -114,6 +76,23 @@ namespace Polyglot
         [Tooltip("If we cant find the string for the selected language we fall back to this language.")]
         [SerializeField]
         private Language fallbackLanguage = Language.English;
+        
+#region Arabic Support
+        [Header("Arabic Support")]
+#if !ARABSUPPORT_ENABLED
+        [Tooltip("Enable Arabic Support with ARABSUPPORT_ENABLED post processor flag")]
+#else
+        [Tooltip("Vowel marks in Arabic.")]
+#endif
+        [SerializeField]
+        private bool showTashkeel = true;
+        
+#if !ARABSUPPORT_ENABLED
+        [Tooltip("Enable Arabic Support with ARABSUPPORT_ENABLED post processor flag")]
+#endif
+        [SerializeField]
+        private bool useHinduNumbers = false;
+#endregion
 
         [Header("Event invoked when language is changed")]
         [Tooltip("This event is invoked every time the selected language is changed.")]
@@ -384,7 +363,7 @@ namespace Polyglot
     #if ARABSUPPORT_ENABLED
                 if (selected == (int) Language.Arabic)
                 {
-                    return ArabicSupport.ArabicFixer.Fix(currentString, true, false);
+                    return ArabicSupport.ArabicFixer.Fix(currentString, instance.showTashkeel, instance.useHinduNumbers);
                 }
     #endif
                 
