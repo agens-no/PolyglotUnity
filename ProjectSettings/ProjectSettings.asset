@@ -554,7 +554,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    1: ARABSUPPORT_ENABLED;TMP_PRESENT
+    1: TMP_PRESENT
     4: ARABSUPPORT_ENABLED
   platformArchitecture:
     iOS: 2
