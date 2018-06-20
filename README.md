@@ -64,6 +64,46 @@ This will create the Localization asset for you if it is not set up yet and then
 	- Saves to PlayerPrefs
 - TextMesh Pro support
     - Make sure TMP_PRESENT is specified in Player Settings -> Scripting Define Symbols
+    - [Additional info about dependencies](#additional-info-for-textmeshpro-integration)
 - Arabic font type support
     - Download ArabicSupport.cs from https://github.com/Konash/arabic-support-unity
     - specify ARABSUPPORT_ENABLED in Player Settings -> Scripting Define Symbols
+
+## Additional info for TextMeshPro integration
+
+To use Polyglot with TextMeshPro from the Unity Package Manager (upm) you will need to add the dependency manually to the assembly definition files.
+
+Versions tested:
+* Unity 2018.1.3f1
+* TextMeshPro 1.2.3 (from upm)
+
+Open PolyglotScripts.asmdef and PolyglotEditor.asmdef in a text editor and manually add the dependency to Unity.TextMeshPro.
+
+Your files should look like this:
+
+PolyglotScripts.asmdef
+```
+{
+    "name": "Polyglot.Scripts",
+    "references": ["Unity.TextMeshPro"],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
+```
+PolyglotEditor.asmdef
+```
+{
+    "name": "Polyglot.Editor",
+    "references": [
+        "Polyglot.Scripts",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
+```
+This makes the scripts find the dependency of TextMeshPro.
