@@ -52,6 +52,7 @@ namespace Polyglot
         public static void ImportTextFile(string text, LocalizationAssetFormat format)
         {
             var lines = text.Split('\n');
+            text = text.Replace("\r\n", "\n");
             var canBegin = false;
             var csv = format == LocalizationAssetFormat.CSV;
             for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
