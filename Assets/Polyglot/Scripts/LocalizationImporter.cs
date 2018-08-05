@@ -51,17 +51,32 @@ namespace Polyglot
 
         public static void ImportTextFile(string text, LocalizationAssetFormat format)
         {
-            var lines = text.Split('\n');
+            List<List<string>> rows;
             text = text.Replace("\r\n", "\n");
-            var canBegin = false;
-            var csv = format == LocalizationAssetFormat.CSV;
-            for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+            if (format == LocalizationAssetFormat.CSV)
             {
-                var line = lines[lineIndex];
-
+                rows = CSVReader.ParseCSV(text);
+            }
+            else
+            {
+                rows = TSVReader.ParseCSV(text);
+            }
+            var canBegin = false;
+            
+            for (int rowIndex = 0; rowIndex < rows.Count; rowIndex++)
+            {
+                var row = rows[rowIndex];
+                var key = row[0];
+                
+                if (string.IsNullOrEmpty(key) || IsLineBreak(key) || row.Count <= 1)
+                {
+                    //Ignore empty lines in the sheet
+                    continue;
+                }
+                
                 if (!canBegin)
                 {
-                    if (line.StartsWith("Polyglot") || line.StartsWith("PolyMaster") || line.StartsWith("BEGIN"))
+                    if (key.StartsWith("Polyglot") || key.StartsWith("PolyMaster") || key.StartsWith("BEGIN"))
                     {
                         canBegin = true;
                         continue;
@@ -73,34 +88,23 @@ namespace Polyglot
                     continue;
                 }
 
-                if (line.StartsWith("END"))
+                if (key.StartsWith("END"))
                 {
                     break;
                 }
 
-                var split = csv ? ',' : '\t';
-
-                var keys = line.Split(split).ToList();
-                var key = keys[0];
-
-                if (string.IsNullOrEmpty(key) || IsLineBreak(key) || keys.Count <= 1)
-                {
-                    //Ignore empty lines in the sheet
-                    continue;
-                }
-
                 //Remove key
-                keys.RemoveAt(0);
+                row.RemoveAt(0);
                 //Remove description
-                keys.RemoveAt(0);
+                row.RemoveAt(0);
 
                 if (languageStrings.ContainsKey(key))
                 {
                     Debug.Log("The key '" + key + "' already exist, but is now overwritten");
-                    languageStrings[key] = keys;
+                    languageStrings[key] = row;
                     continue;
                 }
-                languageStrings.Add(key, keys);
+                languageStrings.Add(key, row);
             }
         }
 
