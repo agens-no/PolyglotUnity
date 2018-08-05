@@ -55,11 +55,11 @@ namespace Polyglot
             text = text.Replace("\r\n", "\n");
             if (format == LocalizationAssetFormat.CSV)
             {
-                rows = CSVReader.ParseCSV(text);
+                rows = CsvReader.Parse(text);
             }
             else
             {
-                rows = TSVReader.ParseCSV(text);
+                rows = TsvReader.Parse(text);
             }
             var canBegin = false;
             
