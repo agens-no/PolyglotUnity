@@ -7,12 +7,12 @@ using UnityEditor.AnimatedValues;
 
 namespace Polyglot
 {
-    #if UNITY_5
+#if UNITY_5
     [UsedImplicitly]
-    #endif
+#endif
     [CustomEditor(typeof(LocalizedTextMeshProUGUI), true)]
     [CanEditMultipleObjects]
-    public class LocalizedTextMeshProUGUIEditor : LocalizedTextEditor
+    public class LocalizedTextMeshProUGUIEditor : LocalizedEditor<LocalizedTextMeshProUGUI>
     {
         private AnimBool showParameters;
 
