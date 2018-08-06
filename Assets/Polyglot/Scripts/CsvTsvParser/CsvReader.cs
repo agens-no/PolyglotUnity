@@ -32,9 +32,7 @@ namespace Polyglot
         {
             var rows = new List<List<string>>();
             var cols = new List<string>();
-#pragma warning disable XS0001 // Find APIs marked as TODO in Mono
             var buffer = new StringBuilder();
-#pragma warning restore XS0001 // Find APIs marked as TODO in Mono
 
             ParsingMode mode = ParsingMode.OutQuote;
             bool requireTrimLineHead = false;
