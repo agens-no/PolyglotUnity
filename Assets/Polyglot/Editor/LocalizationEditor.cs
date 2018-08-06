@@ -127,7 +127,17 @@ namespace Polyglot
                 if(iterator.propertyPath.Contains("Document")) continue;
                 
 #if !ARABSUPPORT_ENABLED
-                using (new EditorGUI.DisabledScope("showTashkeel" == iterator.propertyPath || iterator.propertyPath == "useHinduNumbers"))
+                if (iterator.propertyPath == "Localize")
+                {
+                    using (new EditorGUI.DisabledGroupScope(true))
+                    {
+                        EditorGUILayout.Space();
+                        EditorGUILayout.LabelField("Arabic Support", (GUIStyle)"BoldLabel");
+                        EditorGUILayout.HelpBox("Enable Arabic Support with ARABSUPPORT_ENABLED post processor flag", MessageType.Info);
+                        EditorGUILayout.Toggle(new GUIContent("Show Tashkeel", "Enable Arabic Support with ARABSUPPORT_ENABLED post processor flag"), true);
+                        EditorGUILayout.Toggle(new GUIContent("Use Hindu Numbers", "Enable Arabic Support with ARABSUPPORT_ENABLED post processor flag"), false);
+                    }
+                }
 #endif
                 
                 using (new EditorGUI.DisabledScope("m_Script" == iterator.propertyPath))

@@ -78,20 +78,16 @@ namespace Polyglot
         private Language fallbackLanguage = Language.English;
         
 #region Arabic Support
+#if ARABSUPPORT_ENABLED
         [Header("Arabic Support")]
-#if !ARABSUPPORT_ENABLED
-        [Tooltip("Enable Arabic Support with ARABSUPPORT_ENABLED post processor flag")]
-#else
+    
         [Tooltip("Vowel marks in Arabic.")]
-#endif
         [SerializeField]
         private bool showTashkeel = true;
-        
-#if !ARABSUPPORT_ENABLED
-        [Tooltip("Enable Arabic Support with ARABSUPPORT_ENABLED post processor flag")]
-#endif
+    
         [SerializeField]
         private bool useHinduNumbers = false;
+#endif
 #endregion
 
         [Header("Event invoked when language is changed")]
