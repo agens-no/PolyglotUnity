@@ -28,6 +28,21 @@ namespace Polyglot
             }
         }
 
+        [Tooltip("Maintain original text alignment. If set to false, localization will determine whether text is left or right aligned")]
+        [SerializeField]
+        private bool maintainTextAlignment;
+        public bool MaintainTextAlignment
+        {
+            get
+            {
+                return maintainTextAlignment;
+            }
+            set
+            {
+                maintainTextAlignment = value;
+            }
+        }
+
         public List<object> Parameters { get { return parameters; } }
 
         private List<object> parameters = new List<object>();
@@ -70,7 +85,7 @@ namespace Polyglot
 
             var direction = Localization.Instance.SelectedLanguageDirection;
 
-            if (text != null) UpdateAlignment(text, direction);
+            if (text != null && !maintainTextAlignment) UpdateAlignment(text, direction);
 
 #if UNITY_EDITOR
             if (text != null) text.hideFlags = flags;
