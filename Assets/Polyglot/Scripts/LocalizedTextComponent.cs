@@ -15,12 +15,10 @@ namespace Polyglot
         [Tooltip("The key to localize with")]
         [SerializeField]
         private string key;
+
         public string Key
         {
-            get
-            {
-                return key;
-            }
+            get { return key; }
             set
             {
                 key = value;
@@ -58,7 +56,6 @@ namespace Polyglot
 #if UNITY_5 || UNITY_2017_1_OR_NEWER
         [UsedImplicitly]
 #endif
-
         public void OnEnable()
         {
             Localization.Instance.AddOnLocalizeEvent(this);
@@ -91,7 +88,7 @@ namespace Polyglot
             if (text != null) text.hideFlags = flags;
 #endif
         }
-        
+
         public void ClearParameters()
         {
             parameters.Clear();
