@@ -15,12 +15,10 @@ namespace Polyglot
         [Tooltip("The key to localize with")]
         [SerializeField]
         private string key;
+
         public string Key
         {
-            get
-            {
-                return key;
-            }
+            get { return key; }
             set
             {
                 key = value;
@@ -31,6 +29,9 @@ namespace Polyglot
         public List<object> Parameters { get { return parameters; } }
 
         private List<object> parameters = new List<object>();
+
+        [SerializeField]
+        private bool useLanguageAlignment = true;
 
 #if UNITY_5 || UNITY_2017_1_OR_NEWER
         [UsedImplicitly]
@@ -43,7 +44,6 @@ namespace Polyglot
 #if UNITY_5 || UNITY_2017_1_OR_NEWER
         [UsedImplicitly]
 #endif
-
         public void OnEnable()
         {
             Localization.Instance.AddOnLocalizeEvent(this);
@@ -70,13 +70,13 @@ namespace Polyglot
 
             var direction = Localization.Instance.SelectedLanguageDirection;
 
-            if (text != null) UpdateAlignment(text, direction);
+            if (useLanguageAlignment && text != null) UpdateAlignment(text, direction);
 
 #if UNITY_EDITOR
             if (text != null) text.hideFlags = flags;
 #endif
         }
-        
+
         public void ClearParameters()
         {
             parameters.Clear();
