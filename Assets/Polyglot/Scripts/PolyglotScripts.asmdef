@@ -1,6 +1,6 @@
 {
     "name": "Polyglot.Scripts",
-    "references": [],
+    "references": ["Unity.TextMeshPro"],
     "includePlatforms": [],
     "excludePlatforms": []
 }

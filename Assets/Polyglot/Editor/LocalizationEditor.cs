@@ -183,7 +183,8 @@ namespace Polyglot
             EditorGUI.EndDisabledGroup();
 
             EditorGUI.BeginDisabledGroup(disableOpen);
-            
+            var downloadOnstartProps = document.FindPropertyRelative("downloadOnStart");
+            EditorGUILayout.PropertyField(downloadOnstartProps);
             var formatProps = document.FindPropertyRelative("format");
             EditorGUILayout.PropertyField(formatProps);
 
@@ -196,7 +197,7 @@ namespace Polyglot
             }
             if(GUILayout.Button("Download"))
             {
-                DownloadGoogleSheet(docsIdProp.stringValue, sheetIdProps.stringValue, (LocalizationAssetFormat)formatProps.enumValueIndex, (TextAsset)document.FindPropertyRelative("textAsset").objectReferenceValue);
+                DownloadGoogleSheet(docsIdProp.stringValue, sheetIdProps.stringValue, (GoogleDriveDownloadFormat)formatProps.enumValueIndex, (TextAsset)document.FindPropertyRelative("textAsset").objectReferenceValue);
             }
             EditorGUILayout.EndHorizontal();
             EditorGUI.EndDisabledGroup();
@@ -226,34 +227,23 @@ namespace Polyglot
             DownloadGoogleSheet(doc.DocsId, doc.SheetId, doc.Format, doc.TextAsset);
         }
 
-        private static void DownloadGoogleSheet(string docsId, string sheetId, LocalizationAssetFormat format, TextAsset textAsset)
+        private static void DownloadGoogleSheet(string docsId, string sheetId, GoogleDriveDownloadFormat format, TextAsset textAsset)
         {
             EditorUtility.DisplayCancelableProgressBar("Download", "Downloading...", 0);
-            var url = string.Format("https://docs.google.com/spreadsheets/d/{0}/export?format={2}&gid={1}", docsId, sheetId, Enum.GetName(typeof(LocalizationAssetFormat), format).ToLower());
-            Debug.Log(url);
-#if UNITY_2017_2_OR_NEWER
-            var www = UnityWebRequest.Get(url);
-            www.SendWebRequest();
-#elif UNITY_5_5_OR_NEWER
-            var www = UnityWebRequest.Get(url);
-            www.Send();
-#else
-            var www = new WWW(url);
-#endif
-            while (!www.isDone)
-            {
-#if UNITY_5_5_OR_NEWER
-                var progress = www.downloadProgress;
-#else
-                var progress = www.progress;
-#endif
 
-                if (EditorUtility.DisplayCancelableProgressBar("Download", "Downloading...", progress))
-                {
-                    return;
-                }
+            var iterator = GoogleDownload.DownloadSheet(docsId, sheetId, t => DownloadComplete(t, textAsset), format, DisplayDownloadProgressbar);
+            while(iterator.MoveNext())
+            {}
+        }
+
+        private static void DownloadComplete(string text, TextAsset textAsset)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                Debug.LogError("Could not download google sheet");
+                return;
             }
-            EditorUtility.ClearProgressBar();
+            
             var path = textAsset != null ? AssetDatabase.GetAssetPath(textAsset) : null;
 
             if (string.IsNullOrEmpty(path))
@@ -265,24 +255,23 @@ namespace Polyglot
                 return;
             }
 
-#if UNITY_5_5_OR_NEWER
-            var text = www.downloadHandler.text;
-#else
-            var text = www.text;
-#endif
-
-            if (text.StartsWith("<!"))
-            {
-                Debug.LogError("Google sheet could not be downloaded\n" + text);
-                return;
-            }
-
             File.WriteAllText(path, text);
 
             Debug.Log("Importing " + path);
             AssetDatabase.ImportAsset(path);
 
             LocalizationImporter.Refresh();
+        }
+
+        private static bool DisplayDownloadProgressbar(float progress)
+        {
+            if(progress < 1)
+            {
+                return EditorUtility.DisplayCancelableProgressBar("Download Localization", "Downloading...", progress);
+            }
+        
+            EditorUtility.ClearProgressBar();
+            return false;
         }
     }
 }

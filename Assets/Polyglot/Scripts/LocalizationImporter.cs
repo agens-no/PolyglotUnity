@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -24,13 +25,60 @@ namespace Polyglot
                 Debug.LogError("Could not find a Localization Settings file in Resources.");
                 return;
             }
-            Init(settings.InputFiles);
+            
+            ImportFromFiles(settings);
+            ImportFromGoogle(settings);
         }
 
-        private static void Init(List<LocalizationAsset> csvFiles)
+        private static void ImportFromGoogle(Localization settings)
+        {
+            if (settings.CustomDocument.DownloadOnStart)
+            {
+                Download(settings.PolyglotDocument, s => Import(s, settings.PolyglotDocument.Format));
+            }
+
+            if (settings.CustomDocument.DownloadOnStart)
+            {
+                Download(settings.CustomDocument, s => Import(s, settings.CustomDocument.Format));
+            }
+        }
+
+        private static void Import(string text, GoogleDriveDownloadFormat format)
+        {
+            ImportTextFile(text, format);
+        }
+
+        private static IEnumerator Download(LocalizationDocument document, Action<string> done, Func<float, bool> progressbar = null)
+        {
+            return GoogleDownload.DownloadSheet(document.DocsId, document.SheetId, done, document.Format, progressbar);
+        }
+        
+        public static IEnumerator DownloadPolyglotSheet( Func<float, bool> progressbar = null)
+        {
+            var settings = Localization.Instance;
+            if (settings == null)
+            {
+                Debug.LogError("Could not find a Localization Settings file in Resources.");
+                return null;
+            } 
+            return Download(settings.PolyglotDocument, s => Import(s, settings.PolyglotDocument.Format), progressbar);
+        }
+
+        public static IEnumerator DownloadCustomSheet(Func<float, bool> progressbar = null)
+        {
+            var settings = Localization.Instance;
+            if (settings == null)
+            {
+                Debug.LogError("Could not find a Localization Settings file in Resources.");
+                return null;
+            } 
+            return Download(settings.CustomDocument, s => Import(s, settings.CustomDocument.Format), progressbar);
+        }
+
+        private static void ImportFromFiles(Localization settings)
         {
             InputFiles.Clear();
-            InputFiles.AddRange(csvFiles);
+            InputFiles.AddRange(settings.InputFiles);
         }
 
         private static void PopulateLanguageStrings()
@@ -49,11 +97,11 @@ namespace Polyglot
             }
         }
 
-        public static void ImportTextFile(string text, LocalizationAssetFormat format)
+        public static void ImportTextFile(string text, GoogleDriveDownloadFormat format)
         {
             List<List<string>> rows;
             text = text.Replace("\r\n", "\n");
-            if (format == LocalizationAssetFormat.CSV)
+            if (format == GoogleDriveDownloadFormat.CSV)
             {
                 rows = CsvReader.Parse(text);
             }

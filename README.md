@@ -8,7 +8,7 @@ https://docs.google.com/spreadsheets/d/17f0dQawb-s_Fd7DHgmVvJoEGDMH_yoSd8EYigrb0
 
 ## Unity Version
 
-Works with Unity 4.x, 5.x and 2017.x
+Works with Unity 4.x, 5.x, 2017.x and 2018.x
 
 Tested with several Unity Versions
 * Unity 5.4.4f1
@@ -45,12 +45,20 @@ This will create the Localization asset for you if it is not set up yet and then
 ## Theres also a Language Dropdown script that automatically populates a Dropdown with the available languages
 ![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/LanguageDropdown.png)
 
+## Create your own custom spreadsheet
+Duplicate the polyglot master sheet and remove all the keys from line 7. The importer parses everything line after the term "polyglot", "PolyMaster" or "BEGIN".
+![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/CopySheet.png)
+
+## Add Sheet and docs id to the Localization Configuration
+![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/CustomSheet.png)
+
 ## Current Features
 - Download latest polyglot master sheet as CSV or TSV
 - Download a custom localization sheet as CSV or TSV
     - If you use the same keys as the master sheet your keys will override the master sheet.
 - Import the downloaded file and parse it
     - The sheet is parsed every time you play the game so you can iterate fast.
+    - Can also be set to downloaded and parsed every time you play the game (optional)
 - Managing localizations
 	- Specify any number of csv or tsv files to parse
 	- Select language

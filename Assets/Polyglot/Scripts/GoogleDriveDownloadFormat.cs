@@ -3,7 +3,7 @@ using System;
 namespace Polyglot
 {
     [Serializable]
-    public enum LocalizationAssetFormat
+    public enum GoogleDriveDownloadFormat
     {
         CSV,
         TSV

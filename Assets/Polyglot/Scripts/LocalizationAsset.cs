@@ -10,7 +10,7 @@ namespace Polyglot
         private TextAsset textAsset;
 
         [SerializeField]
-        private LocalizationAssetFormat format = LocalizationAssetFormat.CSV;
+        private GoogleDriveDownloadFormat format = GoogleDriveDownloadFormat.CSV;
 
         public TextAsset TextAsset
         {
@@ -18,7 +18,7 @@ namespace Polyglot
             set { textAsset = value; }
         }
 
-        public LocalizationAssetFormat Format
+        public GoogleDriveDownloadFormat Format
         {
             get { return format; }
             set { format = value; }

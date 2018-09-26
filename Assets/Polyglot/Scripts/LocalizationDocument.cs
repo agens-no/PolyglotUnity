@@ -11,9 +11,11 @@ namespace Polyglot
         [SerializeField]
         private string sheetId;
         [SerializeField]
-        private LocalizationAssetFormat format;
+        private GoogleDriveDownloadFormat format;
         [SerializeField]
         private TextAsset textAsset;
+        [SerializeField]
+        private bool downloadOnStart;
 
         public TextAsset TextAsset
         {
@@ -33,10 +35,16 @@ namespace Polyglot
             set { sheetId = value; }
         }
 
-        public LocalizationAssetFormat Format
+        public GoogleDriveDownloadFormat Format
         {
             get { return format; }
             set { format = value; }
+        }
+
+        public bool DownloadOnStart
+        {
+            get { return downloadOnStart; }
+            set { downloadOnStart = value; }
         }
     }
 }
