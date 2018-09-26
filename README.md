@@ -19,6 +19,9 @@ Tested with several Unity Versions
 * Unity 2017.2.0f3
 * Unity 2017.2.0p2
 * Unity 2017.3.0b10
+* Unity 2018.2.2f1
+* Unity 2018.2.5f1
+* Unity 2018.2.9f1
 
 ## Feedback
 
@@ -26,7 +29,7 @@ We would 😍 to hear your opinion about this library. Please file an issue if t
 
 If you use this library and are happy with it consider sending out a tweet mentioning [@agens](https://twitter.com/agens). This library is made with love by [Skjalg S. Mæhre](https://github.com/Skjalgsm).
 
-[<img src="http://static.agens.no/images/agens_logo_w_slogan_avenir_medium.png" width="340" />](http://agens.no/)
+<img src="http://static.agens.no/images/agens_logo_w_slogan_avenir_medium.png" width="340" />(http://agens.no/)
 
 ## First, you need to Configurate the Localization.
 You do this by selecting the Configurate menu item from within Unity.
@@ -46,7 +49,9 @@ This will create the Localization asset for you if it is not set up yet and then
 ![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/LanguageDropdown.png)
 
 ## Create your own custom spreadsheet
-Duplicate the polyglot master sheet and remove all the keys from line 7. The importer parses everything line after the term "polyglot", "PolyMaster" or "BEGIN".
+Duplicate the polyglot master sheet and remove all the keys from line 7. 
+The importer parses everything line after the term "polyglot", "PolyMaster" or "BEGIN".
+
 ![alt tag](https://raw.githubusercontent.com/agens-no/PolyglotUnity/master/meta/CopySheet.png)
 
 ## Add Sheet and docs id to the Localization Configuration
