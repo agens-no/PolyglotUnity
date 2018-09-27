@@ -159,6 +159,16 @@ namespace Polyglot
             {
                 Localize.Invoke();
             }
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                var localized = FindObjectsOfType<LocalizedText>();
+                foreach (var local in localized)
+                {
+                    local.OnLocalize();
+                }
+            }
+#endif
         }
 
         /// <summary>
@@ -199,7 +209,6 @@ namespace Polyglot
 
         public void SelectLanguage(Language selected)
         {
-            Debug.Log(selected);
             SelectedLanguage = selected;
         }
 
@@ -395,6 +404,19 @@ namespace Polyglot
             }
 
             return string.Format(Get(key), arguments);
+        }
+
+        public bool InputFilesContains(LocalizationDocument doc)
+        {
+            foreach (var inputFile in inputFiles)
+            {
+                if (inputFile != null && inputFile.TextAsset == doc.TextAsset && inputFile.Format == doc.Format)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

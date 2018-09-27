@@ -11,7 +11,7 @@ namespace Polyglot
         {
             if (text == null)
             {
-                Debug.LogWarning("Missing text component for " + this, this);
+                Debug.LogWarning("Missing Text Component on " + gameObject, gameObject);
                 return;
             }
             text.text = value;

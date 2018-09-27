@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -16,15 +16,17 @@ MonoBehaviour:
     sheetId: 296134756
     format: 1
     textAsset: {fileID: 4900000, guid: c4dc0d059266d8d47862f46460cf8f31, type: 3}
+    downloadOnStart: 0
   customDocument:
     docsId: 
     sheetId: 
     format: 1
     textAsset: {fileID: 0}
+    downloadOnStart: 0
   inputFiles:
   - textAsset: {fileID: 4900000, guid: c4dc0d059266d8d47862f46460cf8f31, type: 3}
     format: 1
-  supportedLanguages: 000000000b00000003000000010000000600000002000000
+  supportedLanguages: 00000000
   selectedLanguage: 0
   fallbackLanguage: 0
   Localize:

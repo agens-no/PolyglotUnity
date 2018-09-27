@@ -19,13 +19,19 @@ namespace Polyglot
 
         static LocalizationImporter()
         {
+            Initialize();
+        }
+
+        private static void Initialize()
+        {
             var settings = Localization.Instance;
             if (settings == null)
             {
                 Debug.LogError("Could not find a Localization Settings file in Resources.");
                 return;
             }
-            
+
+            languageStrings.Clear();
             ImportFromFiles(settings);
             ImportFromGoogle(settings);
         }
@@ -79,9 +85,10 @@ namespace Polyglot
         {
             InputFiles.Clear();
             InputFiles.AddRange(settings.InputFiles);
+            ImportInputFiles();
         }
 
-        private static void PopulateLanguageStrings()
+        private static void ImportInputFiles()
         {
             for (var index = 0; index < InputFiles.Count; index++)
             {
@@ -89,7 +96,13 @@ namespace Polyglot
 
                 if (inputAsset == null)
                 {
-                    Debug.LogError("CSVFiles[" + index + "] is null");
+                    Debug.LogError("Input File at index [" + index + "] is null");
+                    continue;
+                }
+                
+                if (inputAsset.TextAsset == null)
+                {
+                    Debug.LogError("Input File Text Asset at index [" + index + "] is null");
                     continue;
                 }
 
@@ -97,7 +110,7 @@ namespace Polyglot
             }
         }
 
-        public static void ImportTextFile(string text, GoogleDriveDownloadFormat format)
+        private static void ImportTextFile(string text, GoogleDriveDownloadFormat format)
         {
             List<List<string>> rows;
             text = text.Replace("\r\n", "\n");
@@ -176,7 +189,7 @@ namespace Polyglot
         {
             if (languageStrings == null || languageStrings.Count == 0)
             {
-                PopulateLanguageStrings();
+                ImportInputFiles();
             }
 
             if (string.IsNullOrEmpty(key) || !languageStrings.ContainsKey(key))
@@ -204,7 +217,7 @@ namespace Polyglot
         {
             if (languageStrings == null || languageStrings.Count == 0)
             {
-                PopulateLanguageStrings();
+                ImportInputFiles();
             }
 
             var multipleLanguageStrings = new Dictionary<string, List<string>>();
@@ -223,7 +236,7 @@ namespace Polyglot
         {
             if (languageStrings == null || languageStrings.Count == 0)
             {
-                PopulateLanguageStrings();
+                ImportInputFiles();
             }
 
             var multipleLanguageStrings = new Dictionary<string, List<string>>();
@@ -240,8 +253,11 @@ namespace Polyglot
 
         public static void Refresh()
         {
-            languageStrings.Clear();
-            PopulateLanguageStrings();
+            Initialize();
+            if (Localization.Instance != null)
+            {
+                Localization.Instance.InvokeOnLocalize();
+            }
         }
 
         public static List<string> GetKeys()

@@ -11,21 +11,7 @@ namespace Polyglot
         [Tooltip("The text component to localize")]
         [SerializeField]
         private T text;
-
-        [Tooltip("The key to localize with")]
-        [SerializeField]
-        private string key;
-
-        public string Key
-        {
-            get { return key; }
-            set
-            {
-                key = value;
-                OnLocalize();
-            }
-        }
-
+        
         [Tooltip("Maintain original text alignment. If set to false, localization will determine whether text is left or right aligned")]
         [SerializeField]
         private bool maintainTextAlignment;
@@ -38,6 +24,20 @@ namespace Polyglot
             set
             {
                 maintainTextAlignment = value;
+            }
+        }
+
+        [Tooltip("The key to localize with")]
+        [SerializeField]
+        private string key;
+
+        public string Key
+        {
+            get { return key; }
+            set
+            {
+                key = value;
+                OnLocalize();
             }
         }
 

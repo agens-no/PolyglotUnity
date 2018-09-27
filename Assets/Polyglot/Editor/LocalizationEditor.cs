@@ -26,6 +26,9 @@ namespace Polyglot
         private const string LocalizationAssetName = "Localization";
         private const string LocalizationAssetPath = "Assets/Polyglot/Resources/"+LocalizationAssetName+".asset";
 
+        private static LocalizationAsset masterSheet;
+        private static LocalizationAsset customSheet;
+
         
         [SerializeField]
         private string myField;
@@ -102,6 +105,12 @@ namespace Polyglot
 
         public override void OnInspectorGUI()
         {
+            if (refresh)
+            {
+                LocalizationImporter.Refresh();
+                refresh = false;
+            }
+            
             EditorGUI.BeginChangeCheck();
             serializedObject.Update();
             
@@ -112,12 +121,25 @@ namespace Polyglot
             {
                 polyglotPath = DefaultPolyglotPath;
             }
-            
-            DisplayDocsAndSheetId("Official Polyglot Master", true, false, serializedObject.FindProperty("polyglotDocument"), OfficialSheet, OfficialGId, polyglotPath);
+
+            var changed = false;
+            if (UpdateTextAsset("polyglotDocument", masterSheet))
+            {
+                changed = true;
+                masterSheet = null;
+            }
+
+            DisplayDocsAndSheetId("Official Polyglot Master", true, false, masterSheet, serializedObject.FindProperty("polyglotDocument"), OfficialSheet, OfficialGId, polyglotPath, DownloadMasterSheet);
 
             EditorGUILayout.Space();
 
-            DisplayDocsAndSheetId("Custom Sheet", false, !ValidateDownloadCustomSheet(), serializedObject.FindProperty("customDocument"), GetPrefsString(CustomDocsIdPrefs), GetPrefsString(CustomSheetIdPrefs), GetPrefsString(CustomPathPrefs));
+            if (UpdateTextAsset("customDocument", customSheet))
+            {
+                changed = true;
+                customSheet = null;
+            }
+            
+            DisplayDocsAndSheetId("Custom Sheet", false, !ValidateDownloadCustomSheet(), customSheet, serializedObject.FindProperty("customDocument"), GetPrefsString(CustomDocsIdPrefs), GetPrefsString(CustomSheetIdPrefs), GetPrefsString(CustomPathPrefs), DownloadCustomSheet);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Localization Settings", (GUIStyle)"IN TitleText");
@@ -147,17 +169,56 @@ namespace Polyglot
 #endif
 
             serializedObject.ApplyModifiedProperties();
-            if (EditorGUI.EndChangeCheck())
+            if (changed || EditorGUI.EndChangeCheck())
             {
-                var manager = target as Localization;
-                if (manager != null)
-                {
-                    manager.InvokeOnLocalize();
-                }
+                refresh = true;
             }
         }
 
-        private static void DisplayDocsAndSheetId(string title, bool disableId, bool disableOpen, SerializedProperty document, string defaultDocs, string defaultSheet, string defaultTextAssetPath)
+        private static bool refresh = false;
+
+        private bool UpdateTextAsset(string documentProperty, LocalizationAsset localizationAsset)
+        {
+            if (localizationAsset == null) return false;
+            
+            var document = serializedObject.FindProperty(documentProperty);
+            var textAssetProps = document.FindPropertyRelative("textAsset");
+            if (textAssetProps.objectReferenceValue == null)
+            {
+                textAssetProps.objectReferenceValue = localizationAsset.TextAsset;
+            }
+            
+            var filesList = serializedObject.FindProperty("inputFiles");
+            var found = false;
+            for (int i = 0; i < filesList.arraySize; i++)
+            {
+                var inputFile = filesList.GetArrayElementAtIndex(i);
+                var textAssetProp = inputFile.FindPropertyRelative("textAsset");
+                var formatProp = inputFile.FindPropertyRelative("format");
+                if (textAssetProp.objectReferenceValue == localizationAsset.TextAsset
+                    && formatProp.enumValueIndex == (int) localizationAsset.Format)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                var lastIndex = filesList.arraySize;
+                filesList.InsertArrayElementAtIndex(lastIndex);
+                var inputFile = filesList.GetArrayElementAtIndex(lastIndex);
+                var textAssetProp = inputFile.FindPropertyRelative("textAsset");
+                textAssetProp.objectReferenceValue = localizationAsset.TextAsset;
+                var formatProp = inputFile.FindPropertyRelative("format");
+                formatProp.enumValueIndex = (int) localizationAsset.Format;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void DisplayDocsAndSheetId(string title, bool disableId, bool disableOpen, LocalizationAsset sheet, SerializedProperty document, string defaultDocs, string defaultSheet, string defaultTextAssetPath, Action download)
         {
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.LabelField(title, (GUIStyle)"IN TitleText");
@@ -197,7 +258,7 @@ namespace Polyglot
             }
             if(GUILayout.Button("Download"))
             {
-                DownloadGoogleSheet(docsIdProp.stringValue, sheetIdProps.stringValue, (GoogleDriveDownloadFormat)formatProps.enumValueIndex, (TextAsset)document.FindPropertyRelative("textAsset").objectReferenceValue);
+                download();
             }
             EditorGUILayout.EndHorizontal();
             EditorGUI.EndDisabledGroup();
@@ -208,8 +269,9 @@ namespace Polyglot
         private static void DownloadMasterSheet()
         {
             var doc = Localization.Instance.PolyglotDocument;
+            DownloadGoogleSheet(doc);
 
-            DownloadGoogleSheet(doc.DocsId, doc.SheetId, doc.Format, doc.TextAsset);
+            masterSheet = new LocalizationAsset {TextAsset = doc.TextAsset, Format = doc.Format};
         }
 
         [MenuItem(MenuItemPath + "Download Custom Sheet", true, 30)]
@@ -223,20 +285,21 @@ namespace Polyglot
         private static void DownloadCustomSheet()
         {
             var doc = Localization.Instance.CustomDocument;
+            DownloadGoogleSheet(doc);
 
-            DownloadGoogleSheet(doc.DocsId, doc.SheetId, doc.Format, doc.TextAsset);
+            customSheet = new LocalizationAsset {TextAsset = doc.TextAsset, Format = doc.Format};
         }
 
-        private static void DownloadGoogleSheet(string docsId, string sheetId, GoogleDriveDownloadFormat format, TextAsset textAsset)
+        private static void DownloadGoogleSheet(LocalizationDocument doc)
         {
             EditorUtility.DisplayCancelableProgressBar("Download", "Downloading...", 0);
 
-            var iterator = GoogleDownload.DownloadSheet(docsId, sheetId, t => DownloadComplete(t, textAsset), format, DisplayDownloadProgressbar);
+            var iterator = GoogleDownload.DownloadSheet(doc.DocsId, doc.SheetId, t => DownloadComplete(t, doc), doc.Format, DisplayDownloadProgressbar);
             while(iterator.MoveNext())
             {}
         }
 
-        private static void DownloadComplete(string text, TextAsset textAsset)
+        private static void DownloadComplete(string text, LocalizationDocument doc)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -244,7 +307,7 @@ namespace Polyglot
                 return;
             }
             
-            var path = textAsset != null ? AssetDatabase.GetAssetPath(textAsset) : null;
+            var path = doc.TextAsset != null ? AssetDatabase.GetAssetPath(doc.TextAsset) : null;
 
             if (string.IsNullOrEmpty(path))
             {
@@ -257,10 +320,11 @@ namespace Polyglot
 
             File.WriteAllText(path, text);
 
-            Debug.Log("Importing " + path);
             AssetDatabase.ImportAsset(path);
-
-            LocalizationImporter.Refresh();
+            
+            doc.TextAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+            EditorUtility.SetDirty(doc.TextAsset);
+            AssetDatabase.SaveAssets();
         }
 
         private static bool DisplayDownloadProgressbar(float progress)
