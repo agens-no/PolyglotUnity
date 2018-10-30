@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Polyglot
 {
-	[CustomPropertyDrawer(typeof(LocalizedString), true)]
-	public sealed class LocalizedStringEditor : PropertyDrawer
+	[CustomPropertyDrawer(typeof(LocalizedStringAttribute), true)]
+	public sealed class LocalizedStringAttributeDrawer : PropertyDrawer
 	{
-		public LocalizedStringEditor()
+		public LocalizedStringAttributeDrawer()
 		{
 			showAutoComplete = true;
 		}
@@ -17,15 +17,17 @@ namespace Polyglot
 
 		public override bool CanCacheInspectorGUI(SerializedProperty property)
 		{
+			Debug.Log("b");
 			// Cache leaded to problems on the layout.
 			return false;
 		}
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
+			Debug.Log("hi");
 			EditorGUI.BeginProperty(position, label, property);
 			EditorGUI.BeginChangeCheck();
 
-			var keyProperty = property.FindPropertyRelative("key");
+			var keyProperty = property;
 			EditorGUI.PropertyField(position, keyProperty, label, true);
 
 			var key = keyProperty.stringValue;
