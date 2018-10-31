@@ -8,6 +8,7 @@ namespace Polyglot
 	public class LocalizedString
 	{
 		[SerializeField]
+		[LocalizedString]
 		private string key;
 		public string Key
 		{
@@ -36,6 +37,7 @@ namespace Polyglot
 			}
 		}
 
+
 		public List<object> Parameters { get { return parameters; } }
 
 
@@ -61,6 +63,16 @@ namespace Polyglot
 		public void AddParameter(string parameter)
 		{
 			AddParameter((object)parameter);
+		}
+
+		public static implicit operator string(LocalizedString localizedString)
+		{
+			return localizedString.Text;
+		}
+
+		public override string ToString()
+		{
+			return Text;
 		}
 	}
 }

@@ -17,13 +17,11 @@ namespace Polyglot
 
 		public override bool CanCacheInspectorGUI(SerializedProperty property)
 		{
-			Debug.Log("b");
 			// Cache leaded to problems on the layout.
 			return false;
 		}
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			Debug.Log("hi");
 			EditorGUI.BeginProperty(position, label, property);
 			EditorGUI.BeginChangeCheck();
 
