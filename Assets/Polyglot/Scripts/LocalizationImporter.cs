@@ -137,7 +137,7 @@ namespace Polyglot
                 
                 if (!canBegin)
                 {
-                    if (key.StartsWith("Polyglot") || key.StartsWith("PolyMaster") || key.StartsWith("BEGIN"))
+                    if (key == "Polyglot" || key == "PolyMaster" || key == "BEGIN")
                     {
                         canBegin = true;
                         continue;
@@ -149,7 +149,7 @@ namespace Polyglot
                     continue;
                 }
 
-                if (key.StartsWith("END"))
+                if (key == "END")
                 {
                     break;
                 }
