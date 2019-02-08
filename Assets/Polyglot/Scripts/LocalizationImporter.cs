@@ -140,12 +140,7 @@ namespace Polyglot
                     if (key == "Polyglot" || key == "PolyMaster" || key == "BEGIN")
                     {
                         canBegin = true;
-                        continue;
                     }
-                }
-
-                if (!canBegin)
-                {
                     continue;
                 }
 
