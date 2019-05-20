@@ -22,6 +22,9 @@ Tested with several Unity Versions
 * Unity 2018.2.2f1
 * Unity 2018.2.5f1
 * Unity 2018.2.9f1
+* Unity 2018.3
+* Unity 2018.4
+* Unity 2019.1
 
 ## Feedback
 
