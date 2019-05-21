@@ -14,6 +14,11 @@ namespace Polyglot
 #if UNITY_5
         [UsedImplicitly]
 #endif
+        private void Awake()
+        {
+            LocalizationImporter.ImportFromGoogle(Localization.Instance, this);
+            DontDestroyOnLoad(gameObject);
+        }
         public void Start()
         {
             Localization.Instance.SelectedLanguage = (Language) PlayerPrefs.GetInt(preferenceKey);

@@ -17,6 +17,8 @@ namespace Polyglot
 
         private static List<LocalizationAsset> InputFiles = new List<LocalizationAsset>();
 
+        private static string preferenceKeyPrefix = "Polyglot.";
+        
         static LocalizationImporter()
         {
             Initialize();
@@ -33,25 +35,31 @@ namespace Polyglot
 
             languageStrings.Clear();
             ImportFromFiles(settings);
-            ImportFromGoogle(settings);
+            ImportFromCache(settings);
+//            ImportFromGoogle(settings);
         }
 
-        private static void ImportFromGoogle(Localization settings)
+        public static void ImportFromGoogle(Localization settings, MonoBehaviour behaviour)
         {
-            if (settings.CustomDocument.DownloadOnStart)
+            if (settings.PolyglotDocument.DownloadOnStart)
             {
-                Download(settings.PolyglotDocument, s => Import(s, settings.PolyglotDocument.Format));
+                behaviour.StartCoroutine(Download(settings.PolyglotDocument, s => Import(s, settings.PolyglotDocument)));
             }
 
             if (settings.CustomDocument.DownloadOnStart)
             {
-                Download(settings.CustomDocument, s => Import(s, settings.CustomDocument.Format));
+                behaviour.StartCoroutine(Download(settings.CustomDocument, s => Import(s, settings.CustomDocument)));
             }
         }
 
-        private static void Import(string text, GoogleDriveDownloadFormat format)
+        private static void Import(string text, LocalizationDocument document)
         {
-            ImportTextFile(text, format);
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+            SaveTextToCache(text, document);
+            ImportTextFile(text, document.Format);
         }
 
         private static IEnumerator Download(LocalizationDocument document, Action<string> done, Func<float, bool> progressbar = null)
@@ -67,7 +75,7 @@ namespace Polyglot
                 Debug.LogError("Could not find a Localization Settings file in Resources.");
                 return null;
             } 
-            return Download(settings.PolyglotDocument, s => Import(s, settings.PolyglotDocument.Format), progressbar);
+            return Download(settings.PolyglotDocument, s => Import(s, settings.PolyglotDocument), progressbar);
         }
 
         public static IEnumerator DownloadCustomSheet(Func<float, bool> progressbar = null)
@@ -78,9 +86,48 @@ namespace Polyglot
                 Debug.LogError("Could not find a Localization Settings file in Resources.");
                 return null;
             } 
-            return Download(settings.CustomDocument, s => Import(s, settings.CustomDocument.Format), progressbar);
+            return Download(settings.CustomDocument, s => Import(s, settings.CustomDocument), progressbar);
         }
 
+        private static void ImportFromCache(Localization settings)
+        {
+            var polyglotDocumentDocsId = settings.PolyglotDocument.DocsId;
+            if (!string.IsNullOrEmpty(polyglotDocumentDocsId))
+            {
+                var preferenceKey = GetCacheKey(settings.PolyglotDocument);
+                if (PlayerPrefs.HasKey(preferenceKey))
+                {
+                    Debug.Log($"ImportFromCache PolyglotDocument");
+                    ImportTextFile(PlayerPrefs.GetString(preferenceKey), settings.PolyglotDocument.Format);
+                }
+            }
+
+            var customDocumentDocsId = settings.CustomDocument.DocsId;
+            if (!string.IsNullOrEmpty(customDocumentDocsId))
+            {
+                var preferenceKey = GetCacheKey(settings.CustomDocument);
+                if (PlayerPrefs.HasKey(preferenceKey))
+                {
+                    Debug.Log($"ImportFromCache CustomDocument");
+                    ImportTextFile(PlayerPrefs.GetString(preferenceKey), settings.CustomDocument.Format);
+                }
+            }
+        }
+
+        private static string GetCacheKey(LocalizationDocument document)
+        {
+            return preferenceKeyPrefix + document.DocsId;
+        }
+
+        private static void SaveTextToCache(string text, LocalizationDocument document)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                Debug.Log($"SaveTextToCache {document.DocsId}");
+                PlayerPrefs.SetString(GetCacheKey(document), text);
+            }
+        }
+        
         private static void ImportFromFiles(Localization settings)
         {
             InputFiles.Clear();
