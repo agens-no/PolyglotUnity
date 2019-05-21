@@ -97,7 +97,7 @@ namespace Polyglot
                 var preferenceKey = GetCacheKey(settings.PolyglotDocument);
                 if (PlayerPrefs.HasKey(preferenceKey))
                 {
-                    Debug.Log($"ImportFromCache PolyglotDocument");
+//                    Debug.Log($"ImportFromCache PolyglotDocument");
                     ImportTextFile(PlayerPrefs.GetString(preferenceKey), settings.PolyglotDocument.Format);
                 }
             }
@@ -108,7 +108,7 @@ namespace Polyglot
                 var preferenceKey = GetCacheKey(settings.CustomDocument);
                 if (PlayerPrefs.HasKey(preferenceKey))
                 {
-                    Debug.Log($"ImportFromCache CustomDocument");
+//                    Debug.Log($"ImportFromCache CustomDocument");
                     ImportTextFile(PlayerPrefs.GetString(preferenceKey), settings.CustomDocument.Format);
                 }
             }
@@ -123,7 +123,7 @@ namespace Polyglot
         {
             if (!string.IsNullOrEmpty(text))
             {
-                Debug.Log($"SaveTextToCache {document.DocsId}");
+//                Debug.Log($"SaveTextToCache {document.DocsId}");
                 PlayerPrefs.SetString(GetCacheKey(document), text);
             }
         }
@@ -203,7 +203,7 @@ namespace Polyglot
 
                 if (languageStrings.ContainsKey(key))
                 {
-                    Debug.Log("The key '" + key + "' already exist, but is now overwritten");
+//                    Debug.Log("The key '" + key + "' already exist, but is now overwritten");
                     languageStrings[key] = row;
                     continue;
                 }
