@@ -342,7 +342,7 @@ namespace Polyglot
         }
 
         /// <summary>
-        /// Retreives the correct language string by key.
+        /// Retrieves the correct language string by key.
         /// </summary>
         /// <param name="key">The key string</param>
         /// <returns>A localized string</returns>
