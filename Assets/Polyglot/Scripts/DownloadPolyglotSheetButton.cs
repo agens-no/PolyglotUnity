@@ -1,45 +1,47 @@
-﻿using Polyglot;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class DownloadPolyglotSheetButton : MonoBehaviour
+namespace Polyglot
 {
-    [SerializeField]
-    private Button button;
-
-    [SerializeField]
-    private RectTransform progressbar;
-
-    private float startWidth;
-
-    private void Reset()
+    public class DownloadPolyglotSheetButton : MonoBehaviour
     {
-        button = GetComponent<Button>();
-    }
+        [SerializeField]
+        private Button button;
 
-    private void OnEnable()
-    {
-        startWidth = progressbar.sizeDelta.x;
-        button.onClick.AddListener(OnClick);
-    }
+        [SerializeField]
+        private RectTransform progressbar = null;
 
-    private void OnDisable()
-    {
-        button.onClick.RemoveListener(OnClick);
-    }
+        private float startWidth;
 
-    private void OnClick()
-    {
-        StartCoroutine(LocalizationImporter.DownloadPolyglotSheet(UpdateProgressbar));
-    }
-
-    private bool UpdateProgressbar(float progress)
-    {
-        if (progressbar != null)
+        private void Reset()
         {
-            progressbar.sizeDelta = new Vector2(progress * startWidth, progressbar.sizeDelta.y);
+            button = GetComponent<Button>();
         }
 
-        return false;
+        private void OnEnable()
+        {
+            startWidth = progressbar.sizeDelta.x;
+            button.onClick.AddListener(OnClick);
+        }
+
+        private void OnDisable()
+        {
+            button.onClick.RemoveListener(OnClick);
+        }
+
+        private void OnClick()
+        {
+            StartCoroutine(LocalizationImporter.DownloadPolyglotSheet(UpdateProgressbar));
+        }
+
+        private bool UpdateProgressbar(float progress)
+        {
+            if (progressbar != null)
+            {
+                progressbar.sizeDelta = new Vector2(progress * startWidth, progressbar.sizeDelta.y);
+            }
+
+            return false;
+        }
     }
 }

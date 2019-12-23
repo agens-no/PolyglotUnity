@@ -1,23 +1,25 @@
 ﻿
-using Polyglot;
 #if UNITY_5
 using JetBrains.Annotations;
 #endif
 using UnityEditor;
 
-public class LocalizationPostProcessor : AssetPostprocessor
+namespace Polyglot
 {
-#if UNITY_5
-    [UsedImplicitly]
-#endif
-    static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
+    public class LocalizationPostProcessor : AssetPostprocessor
     {
-        for (int index = 0; index < importedAssets.Length; index++)
+        #if UNITY_5
+        [UsedImplicitly]
+        #endif
+        static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
-            var str = importedAssets[index];
-            if (str.EndsWith(".csv") && str.Contains("Localization"))
+            for (int index = 0; index < importedAssets.Length; index++)
             {
-                LocalizationImporter.Refresh();
+                var str = importedAssets[index];
+                if (str.EndsWith(".csv") && str.Contains("Localization"))
+                {
+                    LocalizationImporter.Refresh();
+                }
             }
         }
     }
