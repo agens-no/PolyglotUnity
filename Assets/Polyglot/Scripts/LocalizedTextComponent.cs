@@ -43,7 +43,7 @@ namespace Polyglot
 
         public List<object> Parameters { get { return parameters; } }
 
-        private List<object> parameters = new List<object>();
+        private readonly List<object> parameters = new List<object>();
 
 #if UNITY_5 || UNITY_2017_1_OR_NEWER
         [UsedImplicitly]
