@@ -25,6 +25,8 @@ Tested with several Unity Versions
 * Unity 2018.3
 * Unity 2018.4
 * Unity 2019.1
+* Unity 2019.2
+* Unity 2019.3
 
 ## Feedback
 
@@ -79,7 +81,7 @@ The importer parses everything line after the term "polyglot", "PolyMaster" or "
 - Script for saving selected language
 	- Saves to PlayerPrefs
 - TextMesh Pro support
-    - Make sure TMP_PRESENT is specified in Player Settings -> Scripting Define Symbols
+    - Make sure `TMP_PRESENT` is specified in Player Settings -> Scripting Define Symbols
     - [Additional info about dependencies](#additional-info-for-textmeshpro-integration)
 - Arabic font type support
     - Download ArabicSupport.cs from https://github.com/Konash/arabic-support-unity
