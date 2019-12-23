@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Polyglot
 {
-    public class TsvReader
+    public static class TsvReader
     {
         /// <summary>
         /// Parses the TSV string.
