@@ -25,6 +25,8 @@ Tested with several Unity Versions
 * Unity 2018.3
 * Unity 2018.4
 * Unity 2019.1
+* Unity 2019.2
+* Unity 2019.3
 
 ## Feedback
 
