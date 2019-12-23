@@ -11,13 +11,10 @@ namespace Polyglot
     {
         public static IEnumerator DownloadSheet(string docsId, string sheetId, Action<string> done, GoogleDriveDownloadFormat format = GoogleDriveDownloadFormat.CSV, Func<float, bool> progressbar = null)
         {
-            if (progressbar != null)
+            if (progressbar != null && progressbar(0))
             {
-                if (progressbar(0))
-                {
-                    done(null);
-                    yield break;
-                }
+                done(null);
+                yield break;
             }
 
             var url = string.Format("https://docs.google.com/spreadsheets/d/{0}/export?format={2}&gid={1}", docsId, sheetId, Enum.GetName(typeof(GoogleDriveDownloadFormat), format).ToLower());
@@ -37,24 +34,18 @@ namespace Polyglot
 #else
                 var progress = www.progress;
 #endif
-                if (progressbar != null)
-                {
-                    if (progressbar(progress))
-                    {
-                        done(null);
-                        yield break;
-                    }
-                }
-                yield return null;
-            }
-
-            if (progressbar != null)
-            {
-                if (progressbar(1))
+                if (progressbar != null && progressbar(progress))
                 {
                     done(null);
                     yield break;
                 }
+                yield return null;
+            }
+
+            if (progressbar != null && progressbar(1))
+            {
+                done(null);
+                yield break;
             }
 
 #if UNITY_5_5_OR_NEWER
