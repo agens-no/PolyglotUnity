@@ -1,5 +1,4 @@
-﻿using System.Collections;
-#if UNITY_5_3_OR_NEWER
+﻿#if UNITY_5_3_OR_NEWER
 using JetBrains.Annotations;
 #endif
 using UnityEngine;
@@ -14,19 +13,19 @@ namespace Polyglot
         private const string KeyNotFound = "[{0}]";
 
         [SerializeField]
-        private LocalizationDocument polyglotDocument;
+        private LocalizationDocument polyglotDocument = null;
 
         public LocalizationDocument PolyglotDocument { get { return polyglotDocument; } }
         
 
         [SerializeField]
-        private LocalizationDocument customDocument;
+        private LocalizationDocument customDocument = null;
 
         public LocalizationDocument CustomDocument { get { return customDocument; } }
         
         [Tooltip("The comma separated text files to get localization strings from\nThese are prioritized, so the ones added later are always prioritized.")]
         [SerializeField]
-        private List<LocalizationAsset> inputFiles;
+        private List<LocalizationAsset> inputFiles = null;
 
         public List<LocalizationAsset> InputFiles { get { return inputFiles; } }
 
@@ -65,7 +64,7 @@ namespace Polyglot
         [Header("Language Support")]
         [Tooltip("The supported languages by the game.\n Leave empty if you support them all.")]
         [SerializeField]
-        private List<Language> supportedLanguages;
+        private List<Language> supportedLanguages = null;
 
         public List<Language> SupportedLanguages{ get { return supportedLanguages; }}
 

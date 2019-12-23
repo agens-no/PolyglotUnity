@@ -17,7 +17,7 @@ namespace Polyglot
 
         [Tooltip("The key to localize with")]
         [SerializeField]
-        private string key;
+        private string key = null;
 
         public string Key { get { return key; } }
 
