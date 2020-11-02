@@ -111,5 +111,11 @@ namespace Polyglot
         {
             AddParameter((object)parameter);
         }
+        public void SetParameters(params object[] parameters) 
+        {
+            ClearParameters();
+            this.parameters.AddRange(parameters);
+            OnLocalize();
+        }
     }
 }
