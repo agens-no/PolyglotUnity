@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-#if UNITY_2017_2_OR_NEWER
+#if UNITY_5_5_OR_NEWER
 using UnityEngine.Networking;
 #endif
 
@@ -21,22 +21,19 @@ namespace Polyglot
 #if UNITY_2017_2_OR_NEWER
             var www = UnityWebRequest.Get(url);
             www.SendWebRequest();
-#elif UNITY_5_5_OR_NEWER
-            var www = UnityWebRequest.Get(url);
-            www.Send();
 #else
             var www = new WWW(url);
 #endif
             while (!www.isDone)
             {
-#if UNITY_5_5_OR_NEWER
+#if UNITY_2017_2_OR_NEWER
                 var progress = www.downloadProgress;
 #else
                 var progress = www.progress;
 #endif
                 if (progressbar != null && progressbar(progress))
                 {
-                    done(null);
+                    done(www.error);
                     yield break;
                 }
                 yield return null;
@@ -48,10 +45,10 @@ namespace Polyglot
                 yield break;
             }
 
-#if UNITY_5_5_OR_NEWER
+#if UNITY_2017_2_OR_NEWER
             var text = www.downloadHandler.text;
 #else
-            var text = www.text;
+            var text = System.Text.Encoding.UTF8.GetString(www.bytes);
 #endif
 
             if (text.StartsWith("<!"))

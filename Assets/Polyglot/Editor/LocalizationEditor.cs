@@ -297,6 +297,8 @@ namespace Polyglot
             var iterator = GoogleDownload.DownloadSheet(doc.DocsId, doc.SheetId, t => DownloadComplete(t, doc), doc.Format, DisplayDownloadProgressbar);
             while(iterator.MoveNext())
             {}
+            
+            EditorUtility.ClearProgressBar();
         }
 
         private static void DownloadComplete(string text, LocalizationDocument doc)
@@ -318,6 +320,7 @@ namespace Polyglot
                 return;
             }
 
+            Debug.Log("Updating file at '" + path + "' with:\n" + text);
             File.WriteAllText(path, text);
 
             AssetDatabase.ImportAsset(path);
