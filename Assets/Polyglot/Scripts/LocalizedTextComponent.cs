@@ -61,6 +61,11 @@ namespace Polyglot
             Localization.Instance.AddOnLocalizeEvent(this);
         }
 
+        public void OnDisable()
+        {
+            Localization.Instance.RemoveOnLocalizeEvent(this);
+        }
+
         protected abstract void SetText(T component, string value);
 
         protected abstract void UpdateAlignment(T component, LanguageDirection direction);
