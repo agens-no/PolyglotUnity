@@ -7,6 +7,20 @@ using UnityEngine.Events;
 
 namespace Polyglot
 {
+    [System.Serializable]
+    public struct FontOverride
+    {
+        public Language language;
+        public Font font;
+    }
+
+    [System.Serializable]
+    struct FontOverrideSet
+    {
+        public Font referenceFont;
+        public List<FontOverride> overrides;
+    }
+
     [CreateAssetMenu(fileName = "Localization.asset", menuName = "Polyglot Localization")]
     public class Localization : ScriptableObject
     {
@@ -75,7 +89,12 @@ namespace Polyglot
         [Tooltip("If we cant find the string for the selected language we fall back to this language.")]
         [SerializeField]
         private Language fallbackLanguage = Language.English;
-        
+
+        [Header("Language Font Overrides")]
+        [Tooltip("Fonts that should be replaced by other fonts on a per-language basis.\nRelevant for Chinese/Japanese/Korean.\nLanguages not specified will keep the reference font.")]
+        [SerializeField]
+        private List<FontOverrideSet> fontOverrides;
+
 #region Arabic Support
 #if ARABSUPPORT_ENABLED
         [Header("Arabic Support")]
@@ -338,6 +357,28 @@ namespace Polyglot
         public void RemoveOnLocalizeEvent(ILocalize localize)
         {
             Localize.RemoveListener(localize.OnLocalize);
+        }
+
+        public static Font GetFont(Font referenceFont)
+        {
+            return GetFont(referenceFont, Instance.selectedLanguage);
+        }
+
+        public static Font GetFont(Font referenceFont, Language language)
+        {
+            foreach (var overrideSet in Instance.fontOverrides)
+            {
+                if (referenceFont == overrideSet.referenceFont)
+                {
+                    foreach (var fontOverride in overrideSet.overrides)
+                    {
+                        if (fontOverride.language == language)
+                            return fontOverride.font;
+                    }
+                    return referenceFont;
+                }
+            }
+            return referenceFont;
         }
 
         /// <summary>
